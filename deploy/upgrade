@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Add sudoers entries
+#--------------------
+
+/usr/sbin/addsudo /usr/sbin/wc-yum app-clearcenter-core
+
+# GPG key
+#--------
+
+rpm --import /etc/pki/rpm-gpg/clearos-gpg-key >/dev/null 2>&1
+
+exit 0

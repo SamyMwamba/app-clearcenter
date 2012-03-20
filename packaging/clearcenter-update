@@ -1,0 +1,111 @@
+#!/usr/clearos/sandbox/usr/bin/php
+<?php
+
+/**
+ * Antimalware Updates class.
+ *
+ * @category   Apps
+ * @package    Antimalware_Updates
+ * @subpackage Scripts
+ * @author     ClearCenter <developer@clearcenter.com>
+ * @copyright  2011-2012 ClearCenter
+ * @license    http://www.clearcenter.com/app_license ClearCenter license
+ * @link       http://www.clearcenter.com/support/documentation/clearos/antimalware_updates/
+ */
+
+///////////////////////////////////////////////////////////////////////////////
+// N A M E S P A C E
+///////////////////////////////////////////////////////////////////////////////
+
+namespace clearos\apps\antimalware_updates;
+
+///////////////////////////////////////////////////////////////////////////////
+// B O O T S T R A P
+///////////////////////////////////////////////////////////////////////////////
+
+$bootstrap = getenv('CLEAROS_BOOTSTRAP') ? getenv('CLEAROS_BOOTSTRAP') : '/usr/clearos/framework/shared';
+require_once $bootstrap . '/bootstrap.php';
+
+///////////////////////////////////////////////////////////////////////////////
+// T R A N S L A T I O N S
+///////////////////////////////////////////////////////////////////////////////
+
+clearos_load_language('clearcenter');
+
+///////////////////////////////////////////////////////////////////////////////
+// D E P E N D E N C I E S
+///////////////////////////////////////////////////////////////////////////////
+
+// Classes
+//--------
+
+use \clearos\apps\clearcenter\Application_Web_Service as Application_Web_Service;
+use \clearos\apps\tasks\Cron as Cron;
+
+clearos_load_library('clearcenter/Application_Web_Service');
+clearos_load_library('tasks/Cron');
+
+// Exceptions
+//-----------
+
+use \Exception as Exception;
+
+///////////////////////////////////////////////////////////////////////////////
+// M A I N
+///////////////////////////////////////////////////////////////////////////////
+
+// Command line options
+//--------------------------------------------------------------------
+
+$short_options  = '';
+
+// Common
+$short_options .= 'b:'; // ClearCenter basename
+$short_options .= 'r:'; // RPM pakcage
+$short_options .= 'a:'; // App
+
+$options = getopt($short_options);
+
+$rpm = $options['r'];
+$app = $options['a'];
+$basename = $options['b'];
+
+if (empty($rpm) || empty($app) || empty($basename))
+    exit(1);
+
+// Command line options
+//--------------------------------------------------------------------
+
+$service = new Application_Web_Service($basename, $rpm);
+
+try {
+    $do_update = $service->check_for_update();
+    if ($do_update) {
+        clearos_log($app, lang('clearcenter_service_requires_an_update'));
+        $service->install_update();
+    } else {
+        clearos_log($app, lang('clearcenter_service_is_up_to_date'));
+    }
+} catch (Exception $e) {
+    clearos_log($app, lang('clearcenter_service_update_failed:') . $e->GetMessage());
+}
+
+// Add new update time in cron
+//----------------------------
+
+try {
+	$next_date = date('w') + 1;
+	$cron_entry = rand(0,59) . ' ' . rand(1,6) . ' * * ' . $next_date . 
+        " root /usr/sbin/clearcenter-update -b $basename -r $rpm -a $app >/dev/null 2>&1\n";
+
+	$cron = new Cron();
+
+	if ($cron->exists_configlet($app))
+		$cron->delete_configlet($app);
+
+	$cron->add_configlet($app, $cron_entry);
+} catch (Exception $e) {
+	clearos_log($app, lang('clearcenter_service_update_failed:') . $e->GetMessage());
+}
+
+// vim: syntax=php ts=4
