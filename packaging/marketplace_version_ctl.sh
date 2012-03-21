@@ -72,6 +72,8 @@ $colours['red'] = '0;31';
 $colours['green'] = '0;32';
 $colours['yellow'] = '0;33';
 
+$me = shell_exec('whoami');
+
 $options = getopt(NULL, $long_options);
 
 $help = isset($options['help']) ? TRUE : FALSE;
@@ -125,6 +127,7 @@ function create_template_file()
 {
     global $options;
     global $colours;
+    global $me;
     try {
         if (!isset($options['basename'])) {
             echo "Requires --basename parameter\n";
@@ -134,7 +137,7 @@ function create_template_file()
             $basename = preg_replace('/-/', '_', strtolower($options['basename']));
         }
 
-        $filename = CLEAROS_TEMP_DIR . '/' . $basename . '-' . get_current_user() . '.template';
+        $filename = CLEAROS_TEMP_DIR . '/' . $basename . '-' . $me . '.template';
         $file = new File($filename);
         if ($file->exists()) {
             echo "Template file exists - OK to overwrite (y/n)?\n";
@@ -147,7 +150,7 @@ function create_template_file()
             echo "Overwriting file " . $filename . "\n";
             $file->delete();
         }
-        $file->create(get_current_user(), get_current_user(), '640');
+        $file->create($me, $me, '640');
         $extras = array(
             'apikey' => $options['apikey'],
             'basename' => $basename
@@ -223,6 +226,7 @@ function add_version()
 {
     global $options;
     global $colours;
+    global $me;
     try {
         if (!isset($options['basename'])) {
             echo "Requires --basename parameter\n";
@@ -239,7 +243,7 @@ function add_version()
                 exit(1);
             }
         } else {
-            $filename = CLEAROS_TEMP_DIR . '/' . $basename . '-' . get_current_user() . '.template';
+            $filename = CLEAROS_TEMP_DIR . '/' . $basename . '-' . $me . '.template';
             $file = new Configuration_File($filename);
             if (!$file->exists()) {
                 echo "Template file does not exist.\n";
