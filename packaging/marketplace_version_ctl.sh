@@ -72,7 +72,7 @@ $colours['red'] = '0;31';
 $colours['green'] = '0;32';
 $colours['yellow'] = '0;33';
 
-$me = shell_exec('whoami');
+$me = trim(shell_exec('whoami'));
 
 $options = getopt(NULL, $long_options);
 
