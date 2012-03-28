@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'clearcenter';
-$app['version'] = '1.0.6';
+$app['version'] = '1.0.10';
 $app['release'] = '1';
 $app['vendor'] = 'ClearCenter';
 $app['packager'] = 'ClearCenter';
@@ -29,6 +29,7 @@ $app['menu_enabled'] = FALSE;
 $app['core_requires'] = array(
     'app-language-core',
     'app-suva-core',
+    'webconfig-zend-guard-loader'
 );
 
 $app['core_file_manifest'] = array( 
@@ -40,8 +41,8 @@ $app['core_file_manifest'] = array(
         'target' => '/usr/sbin/wc-yum',
         'mode' => '0755',
     ),
-   'marketplace_version_ctl' => array(
-        'target' => '/usr/sbin/marketplace_version_ctl',
+   'marketplace_version_ctl.sh' => array(
+        'target' => '/usr/sbin/marketplace_version_ctl.sh',
         'mode' => '0755',
     ),
     'clearos-gpg-key' => array('target' => '/etc/pki/rpm-gpg/clearos-gpg-key'),

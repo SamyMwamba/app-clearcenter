@@ -1,7 +1,7 @@
 
 Name: app-clearcenter
 Epoch: 1
-Version: 1.0.6
+Version: 1.0.10
 Release: 1%{dist}
 Summary: ClearCenter Base
 License: Proprietary
@@ -21,6 +21,7 @@ Group: ClearOS/Libraries
 Requires: app-base-core
 Requires: app-language-core
 Requires: app-suva-core
+Requires: webconfig-zend-guard-loader
 
 %description core
 The base system provides a core set of tools for software from ClearCenter.
@@ -38,7 +39,7 @@ cp -r * %{buildroot}/usr/clearos/apps/clearcenter/
 install -d -m 0755 %{buildroot}/var/clearos/clearcenter
 install -D -m 0755 packaging/clearcenter-update %{buildroot}/usr/sbin/clearcenter-update
 install -D -m 0644 packaging/clearos-gpg-key %{buildroot}/etc/pki/rpm-gpg/clearos-gpg-key
-install -D -m 0755 packaging/marketplace_version_ctl %{buildroot}/usr/sbin/marketplace_version_ctl
+install -D -m 0755 packaging/marketplace_version_ctl.sh %{buildroot}/usr/sbin/marketplace_version_ctl.sh
 install -D -m 0755 packaging/wc-yum %{buildroot}/usr/sbin/wc-yum
 
 %post
@@ -85,5 +86,5 @@ exit 0
 /usr/clearos/apps/clearcenter/libraries
 /usr/sbin/clearcenter-update
 /etc/pki/rpm-gpg/clearos-gpg-key
-/usr/sbin/marketplace_version_ctl
+/usr/sbin/marketplace_version_ctl.sh
 /usr/sbin/wc-yum
