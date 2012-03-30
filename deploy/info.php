@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'clearcenter';
-$app['version'] = '1.0.10';
+$app['version'] = '1.0.11';
 $app['release'] = '1';
 $app['vendor'] = 'ClearCenter';
 $app['packager'] = 'ClearCenter';
@@ -33,7 +33,7 @@ $app['core_requires'] = array(
 );
 
 $app['core_file_manifest'] = array( 
-   'clearcenter-update' => array(
+    'clearcenter-update' => array(
         'target' => '/usr/sbin/clearcenter-update',
         'mode' => '0755',
     ),
@@ -46,8 +46,10 @@ $app['core_file_manifest'] = array(
         'mode' => '0755',
     ),
     'clearos-gpg-key' => array('target' => '/etc/pki/rpm-gpg/clearos-gpg-key'),
+    'license.ini' => array('target' => '/usr/clearos/sandbox/etc/php.d/license.ini'),
+    'license.zl' => array('target' => '/var/clearos/clearcenter/license.zl'),
 );
 
 $app['core_directory_manifest'] = array( 
-   '/var/clearos/clearcenter' => array(),
+    '/var/clearos/clearcenter' => array(),
 );

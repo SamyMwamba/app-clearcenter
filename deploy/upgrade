@@ -10,4 +10,11 @@
 
 rpm --import /etc/pki/rpm-gpg/clearos-gpg-key >/dev/null 2>&1
 
+# Zend Guard apps
+#----------------
+
+if [ ! -e /var/clearos/clearcenter/license.zl ]; then
+    cp /usr/clearos/apps/clearcenter/deploy/license.zl /var/clearos/clearcenter/license.zl
+fi
+
 exit 0
