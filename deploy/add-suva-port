@@ -1,0 +1,52 @@
+#!/usr/clearos/sandbox/usr/bin/php
+<?php
+
+/**
+ * Add port script.
+ *
+ *
+ * @category   Apps
+ * @package    ClearCenter
+ * @subpackage Scripts
+ * @author     ClearCenter <developer@clearcenter.com>
+ * @copyright  2012 ClearCenter
+ * @license    http://www.clearcenter.com/app_license ClearCenter license
+ * @link       http://www.clearcenter.com/support/documentation/clearos/clearcenter/
+ */
+
+///////////////////////////////////////////////////////////////////////////////
+// B O O T S T R A P
+///////////////////////////////////////////////////////////////////////////////
+
+$bootstrap = getenv('CLEAROS_BOOTSTRAP') ? getenv('CLEAROS_BOOTSTRAP') : '/usr/clearos/framework/shared';
+require_once $bootstrap . '/bootstrap.php';
+
+///////////////////////////////////////////////////////////////////////////////
+// D E P E N D E N C I E S
+///////////////////////////////////////////////////////////////////////////////
+
+// Classes
+//--------
+
+use \clearos\apps\incoming_firewall\Incoming as Incoming;
+
+clearos_load_library('incoming_firewall/Incoming');
+
+// Exceptions
+//-----------
+
+use \clearos\apps\firewall\Rule_Already_Exists_Exception as Rule_Already_Exists_Exception;
+
+clearos_load_library('firewall/Rule_Already_Exists_Exception');
+
+///////////////////////////////////////////////////////////////////////////////
+// M A I N
+///////////////////////////////////////////////////////////////////////////////
+
+$incoming = new Incoming();
+
+try {
+    $incoming->add_allow_port('ClearSDN', 'TCP', '1875');
+} catch (Rule_Already_Exists_Exception $e) {
+    // Not fatal
+}
