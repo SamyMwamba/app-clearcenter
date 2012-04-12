@@ -43,7 +43,6 @@ use \clearos\apps\base\Configuration_File as Configuration_File;
 use \clearos\apps\base\Engine as Engine;
 use \clearos\apps\base\File as File;
 use \clearos\apps\base\Folder as Folder;
-use \clearos\apps\base\OS as OS;
 use \clearos\apps\base\Product as Product;
 use \clearos\apps\language\Locale as Locale;
 use \clearos\apps\suva\Suva as Suva;
@@ -52,7 +51,6 @@ clearos_load_library('base/Configuration_File');
 clearos_load_library('base/Engine');
 clearos_load_library('base/File');
 clearos_load_library('base/Folder');
-clearos_load_library('base/OS');
 clearos_load_library('base/Product');
 clearos_load_library('language/Locale');
 clearos_load_library('suva/Suva');
@@ -389,14 +387,12 @@ class Web_Service extends Engine
         $suva = new Suva();
         $this->hostkey = $suva->get_hostkey();
 
-        $os = new OS();
-        $this->os_name = $os->get_name();
-        $this->os_version = $os->get_version();
+        $product = new Product();
+        $this->os_name = $product->get_name();
+        $this->os_version = $product->get_version();
+        $this->vendor = $product->get_vendor();
     
         $language= new Locale();
         $this->langcode = $language->get_language_code();
-
-        $product = new Product();
-        $this->vendor = $product->get_vendor();
     }
 }
