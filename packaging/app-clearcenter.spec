@@ -1,7 +1,7 @@
 
 Name: app-clearcenter
 Epoch: 1
-Version: 1.0.10
+Version: 1.0.16
 Release: 1%{dist}
 Summary: ClearCenter Base
 License: Proprietary
@@ -42,7 +42,6 @@ install -D -m 0644 packaging/clearos-gpg-key %{buildroot}/etc/pki/rpm-gpg/clearo
 install -D -m 0644 packaging/license.ini %{buildroot}/usr/clearos/sandbox/etc/php.d/license.ini
 install -D -m 0644 packaging/license.zl %{buildroot}/var/clearos/clearcenter/license.zl
 install -D -m 0755 packaging/marketplace_version_ctl.sh %{buildroot}/usr/sbin/marketplace_version_ctl.sh
-install -D -m 0755 packaging/wc-yum %{buildroot}/usr/sbin/wc-yum
 
 if [ -d %{buildroot}/usr/clearos/apps/clearcenter/libraries_zendguard ]; then
     rm -rf %{buildroot}/usr/clearos/apps/clearcenter/libraries
@@ -96,4 +95,3 @@ exit 0
 /usr/clearos/sandbox/etc/php.d/license.ini
 /var/clearos/clearcenter/license.zl
 /usr/sbin/marketplace_version_ctl.sh
-/usr/sbin/wc-yum

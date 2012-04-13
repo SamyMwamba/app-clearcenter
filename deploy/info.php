@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'clearcenter';
-$app['version'] = '1.0.10';
+$app['version'] = '1.0.16';
 $app['release'] = '1';
 $app['vendor'] = 'ClearCenter';
 $app['packager'] = 'ClearCenter';
@@ -37,11 +37,7 @@ $app['core_file_manifest'] = array(
         'target' => '/usr/sbin/clearcenter-update',
         'mode' => '0755',
     ),
-   'wc-yum' => array(
-        'target' => '/usr/sbin/wc-yum',
-        'mode' => '0755',
-    ),
-   'marketplace_version_ctl.sh' => array(
+    'marketplace_version_ctl.sh' => array(
         'target' => '/usr/sbin/marketplace_version_ctl.sh',
         'mode' => '0755',
     ),
