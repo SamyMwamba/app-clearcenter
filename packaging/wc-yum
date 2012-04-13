@@ -118,6 +118,9 @@ class wcRepo:
         status['details'] = 'Fetching repositories.'
         print json.dumps(status)
 
+        if os.path.exists('/var/clearos/registration/registered') == False:
+            return []
+
         osvendor = None
         fh = open('/etc/product', 'r')
         lines = fh.readlines()
