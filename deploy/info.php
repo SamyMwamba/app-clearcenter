@@ -48,4 +48,5 @@ $app['core_file_manifest'] = array(
 
 $app['core_directory_manifest'] = array( 
     '/var/clearos/clearcenter' => array(),
+    '/var/clearos/clearcenter/apps' => array(),
 );
