@@ -37,6 +37,7 @@ mkdir -p -m 755 %{buildroot}/usr/clearos/apps/clearcenter
 cp -r * %{buildroot}/usr/clearos/apps/clearcenter/
 
 install -d -m 0755 %{buildroot}/var/clearos/clearcenter
+install -d -m 0755 %{buildroot}/var/clearos/clearcenter/apps
 install -D -m 0755 packaging/clearcenter-update %{buildroot}/usr/sbin/clearcenter-update
 install -D -m 0644 packaging/clearos-gpg-key %{buildroot}/etc/pki/rpm-gpg/clearos-gpg-key
 install -D -m 0644 packaging/license.ini %{buildroot}/usr/clearos/sandbox/etc/php.d/license.ini
@@ -87,6 +88,7 @@ exit 0
 %exclude /usr/clearos/apps/clearcenter/tests
 %dir /usr/clearos/apps/clearcenter
 %dir /var/clearos/clearcenter
+%dir /var/clearos/clearcenter/apps
 /usr/clearos/apps/clearcenter/deploy
 /usr/clearos/apps/clearcenter/language
 /usr/clearos/apps/clearcenter/libraries
