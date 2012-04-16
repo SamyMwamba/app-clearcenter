@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cp /usr/clearos/apps/clearcenter/deploy/clearos-professional.repo /etc/yum.repos.d/
+
