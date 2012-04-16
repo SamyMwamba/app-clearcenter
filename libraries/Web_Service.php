@@ -113,7 +113,7 @@ class Web_Service extends Engine
     const CONSTANT_ASP = 'asp';
     const CONSTANT_NOT_REGISTERED = 20;
 
-    const PATH_SUBSCRIPTIONS = '/var/lib/suva/services';
+    const PATH_SUBSCRIPTIONS = '/var/clearos/clearcenter/apps';
     const FILE_REGISTERED = '/var/clearos/registration/registered';
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -303,7 +303,7 @@ class Web_Service extends Engine
             $info["title"] = $file->lookup_value("/^title\s*=\s*/");
             $info["message"] = $file->lookup_value("/^message\s*=\s*/");
             $info["updated"] = $file->lookup_value("/^updated\s*=\s*/");
-            $info["cached"] = $file->LastModified();
+            $info["cached"] = $file->last_modified();
 
             return $info;
         } else if (!$real_time && !$file_exists) {
