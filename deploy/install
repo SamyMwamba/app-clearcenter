@@ -1,4 +1,0 @@
-#!/bin/sh
-
-logger -p local6.notice -t installer "app-clearcenter-core - prepping repos"
-cp /usr/clearos/apps/clearcenter/deploy/clearos-professional.repo /etc/yum.repos.d/

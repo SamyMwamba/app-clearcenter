@@ -1,9 +1,0 @@
-[clearos-professional-upgrade]
-name=ClearOS Professional $releasever - $basearch - Professional Upgrade
-baseurl=http://download1.clearsdn.com/marketplace/professional/$releasever/$basearch
-    http://download2.clearsdn.com/marketplace/professional/$releasever/$basearch
-    http://download3.clearsdn.com/marketplace/professional/$releasever/$basearch
-    http://download4.clearsdn.com/marketplace/professional/$releasever/$basearch
-enabled=1
-gpgcheck=0
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-ClearOS
