@@ -64,6 +64,7 @@ $helpopts  = '
       +-- get_versions
       +-- update
       +-- details
+      +-- get_sales
   --help: help
 
 ';
@@ -107,6 +108,9 @@ switch ($options['action']) {
         return;
     case 'details':
         details();
+        return;
+    case 'get_sales':
+        get_sales();
         return;
     default:
         echo "\033[" . $colours['red'] . "mInvalid action.\033[0m\n";
@@ -294,6 +298,46 @@ function get_versions()
             foreach ($result->list as $version) {
                 echo $version->id . "\t" . $version->version . "\t" . $version->release . "\t" . $version->state
                     . "\t" . $version->released . "\t" . $version->repo_name . "\n";
+            }
+            echo "\n";
+        } else {
+            echo "\033[" . $colours['red'] . "m" . $result->msg . "\033[0m\n";
+        }
+    } catch (Exception $e) {
+        echo "An error occurred: " . clearos_exception_message($e) . "\n";
+    }
+}
+
+/**
+ * List sales of app.
+ *
+ * @return void
+ */
+
+function get_sales()
+{
+    global $options;
+    global $colours;
+    try {
+        if (!isset($options['basename'])) {
+            echo "Requires --basename parameter\n";
+            echo " ie. --basename=zarafa_community\n";
+            exit(1);
+        } else {
+            $basename = preg_replace('/-/', '_', strtolower($options['basename']));
+        }
+
+        $extras['apikey'] = $options['apikey'];
+        $extras['basename'] = $basename;
+        $result = json_decode(request('get_sales', $extras));
+        if ($result->code == 0) {
+            $heading = "App sales for " . $basename;
+            echo "\n" . $heading . "\n";
+            echo preg_replace("/./", "=", $heading) . "\n\n";
+            $heading = str_pad("Field", 20) . "Value";
+            echo str_pad('ID', 10) . str_pad('Username', 20) . str_pad('Country', 10) . str_pad('IP', 20) . str_pad('Purchased', 10) . "\n";
+            foreach ($result->list as $sale) {
+                echo str_pad($sale->id, 10) . str_pad($sale->username, 20) . str_pad($sale->country, 10) . str_pad($sale->ip, 20) . str_pad($sale->purchased, 10) . "\n";
             }
             echo "\n";
         } else {
