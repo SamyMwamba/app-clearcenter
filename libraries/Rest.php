@@ -45,6 +45,7 @@ use \clearos\apps\base\Folder as Folder;
 use \clearos\apps\base\OS as OS;
 use \clearos\apps\base\Product as Product;
 use \clearos\apps\language\Locale as Locale;
+use \clearos\apps\base\Shell as Shell;
 use \clearos\apps\suva\Suva as Suva;
 use \clearos\apps\base\Daemon as Daemon;
 
@@ -55,6 +56,7 @@ clearos_load_library('base/Folder');
 clearos_load_library('base/OS');
 clearos_load_library('base/Product');
 clearos_load_library('language/Locale');
+clearos_load_library('base/Shell');
 clearos_load_library('suva/Suva');
 clearos_load_library('base/Daemon');
 
@@ -95,6 +97,7 @@ class Rest extends Engine
     const AUTH_ERR = 4;
     const SESSION_TIMEOUT = 5;
     const INVALID_TOKEN = 6;
+    const COMMAND_NSCD = '/usr/sbin/nscd';
 
     ///////////////////////////////////////////////////////////////////////////////
     // V A R I A B L E S
@@ -291,13 +294,12 @@ class Rest extends Engine
      * @param string $resource   resource
      * @param string $method     method
      * @param string $parameters parameters to pass (eg ip=1.2.3.4)
-     * @param int    $counter    counter
      *
      * @return string JSON encoded response
      * @throws Engine_Exception
      */
 
-    public function request($resource, $method, $parameters = "", $counter = 0)
+    public function request($resource, $method, $parameters = "")
     {
         clearos_profile(__METHOD__, __LINE__);
 
@@ -378,22 +380,20 @@ class Rest extends Engine
 
         // None of the SDN servers responded -- send the last error code.
         if ($errno == CURLE_COULDNT_RESOLVE_HOST) {
-            if ($counter > 3)
-                throw new Engine_Exception(lang('clearcenter_dns_lookup_failed'), CLEAROS_INFO);
             try {
-                // Restart dnsmasq and nscd to make sure an invalid IP has not been cached
-                if ($counter == 0) {
-                    // Reset DNS cache
-                    clearos_profile(__METHOD__, __LINE__, 'Resetting DNS cache...');
-                    $dnsmasq = new Daemon('dnsmasq');
-                    $dnsmasq->reset();
-                    $nscd = new Daemon('nscd'); 
-                    $nscd->reset();
-                }
+                // Ensure an invalid IP has not been cached
+                // Reset DNS cache
+                clearos_profile(__METHOD__, __LINE__, 'Resetting DNS cache...');
+                $dnsmasq = new Daemon('dnsmasq');
+                $dnsmasq->reset();
+                
+                $shell = new Shell();
+                // Purge DNS caching
+                $shell->execute(self::COMMAND_NSCD, "-i hosts", TRUE);
             } catch (Engine_Exception $e) {
-                // Carry on
+                // Carry on ... We're going to throw an exception anyways
             }
-            $this->request($resource, $method, $parameters, $counter++);
+            throw new Engine_Exception(lang('clearcenter_dns_lookup_failed'), CLEAROS_INFO);
         } else if ($errno == CURLE_OPERATION_TIMEOUTED) {
             throw new Engine_Exception(lang('clearcenter_unable_to_contact_remote_server'), CLEAROS_INFO);
         } else {

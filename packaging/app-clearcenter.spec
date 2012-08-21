@@ -1,7 +1,7 @@
 
 Name: app-clearcenter
 Epoch: 1
-Version: 1.2.2
+Version: 1.2.3
 Release: 1%{dist}
 Summary: ClearCenter Base
 License: Proprietary
@@ -15,7 +15,7 @@ Requires: app-base
 The base system provides a core set of tools for software from ClearCenter.
 
 %package core
-Summary: ClearCenter Base - Core
+Summary: ClearCenter Base - APIs and install
 License: Proprietary
 Group: ClearOS/Libraries
 Requires: app-base-core
@@ -43,11 +43,6 @@ install -D -m 0644 packaging/clearos-gpg-key %{buildroot}/etc/pki/rpm-gpg/clearo
 install -D -m 0644 packaging/license.ini %{buildroot}/usr/clearos/sandbox/etc/php.d/license.ini
 install -D -m 0644 packaging/license.zl %{buildroot}/var/clearos/clearcenter/license.zl
 install -D -m 0755 packaging/marketplace_version_ctl.sh %{buildroot}/usr/sbin/marketplace_version_ctl.sh
-
-if [ -d %{buildroot}/usr/clearos/apps/clearcenter/libraries_zendguard ]; then
-    rm -rf %{buildroot}/usr/clearos/apps/clearcenter/libraries
-    mv %{buildroot}/usr/clearos/apps/clearcenter/libraries_zendguard %{buildroot}/usr/clearos/apps/clearcenter/libraries
-fi
 
 %post
 logger -p local6.notice -t installer 'app-clearcenter - installing'
