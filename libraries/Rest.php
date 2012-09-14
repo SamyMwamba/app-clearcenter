@@ -131,6 +131,7 @@ class Rest extends Engine
     {
         clearos_profile(__METHOD__, __LINE__);
         $this->CI =& get_instance();
+        // Don't change random range below without looking at regex in delete_cache function
         if ($this->CI->session->userdata('sdn_rest_id') == NULL)
             $this->CI->session->set_userdata(array('sdn_rest_id' => rand(10000, 10000000)));
     }
@@ -263,26 +264,57 @@ class Rest extends Engine
     }
 
     /**
+     * Get cache size.
+     *
+     * @return int cache size in bytes
+     *
+     * @throws Engine_Exception
+     */
+
+    public function get_cache_size()
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        $folder = new Folder(CLEAROS_CACHE_DIR);
+        return $folder->get_size();
+    }
+
+    /**
      * Deletes a cache file.
      *
-     * @param string $filename a filename or set to NULL for all cache files
+     * @param string  $filename  a filename or set to NULL for all cache files
+     * @param boolean $force_all flag to delete all cache files created by this library
      *
      * @return array information
      *
      * @throws Engine_Exception
      */
 
-    public function delete_cache($filename = NULL)
+    public function delete_cache($filename = NULL, $force_all = FALSE)
     {
         clearos_profile(__METHOD__, __LINE__);
 
         $folder = new Folder(CLEAROS_CACHE_DIR);
         $listing = $folder->get_listing(TRUE);
         foreach ($listing as $element) {
-            if ($filename == NULL && !preg_match("/.*" . $this->CI->session->userdata['sdn_rest_id'] . "$/", $element['name']))
+            if ($force_all) {
+                if (preg_match("/^app-logo.*\.png$/", $element['name'])) {
+                    // Delete app logos
+                } else if (preg_match("/^app-screenshots.*\.png$/", $element['name'])) {
+                    // Delete app screenshots
+                } else if (preg_match("/^app-.*\.[\d]{5,8}$/", $element['name'])) {
+                    // Delete app cart info
+                } else if (preg_match("/^[a-f0-9]{32}\.[\d]{5,8}$/", $element['name'])) {
+                    // Delete app cart info
+                } else {
+                    // Don't delete anything else
+                    continue;
+                }
+            } else if ($filename == NULL && !preg_match("/.*" . $this->CI->session->userdata['sdn_rest_id'] . "$/", $element['name'])) {
                 continue;
-            if ($filename != NULL && $filename != $element['name'])
+            } else if ($filename != NULL && $filename != $element['name']) {
                 continue;
+            }
             $file = new File(CLEAROS_CACHE_DIR . "/" . $element['name']);
             $file->delete();
         }
