@@ -375,6 +375,33 @@ class Rest extends Engine
                 unset($ch);
 
             $ch = curl_init();
+
+            // Check for upstream proxy settings
+            //----------------------------------
+
+            if (clearos_app_installed('upstream_proxy')) {
+                clearos_load_library('upstream_proxy/Proxy');
+
+                $proxy = new \clearos\apps\upstream_proxy\Proxy();
+
+                $proxy_server = $proxy->get_server();
+                $proxy_port = $proxy->get_port();
+                $proxy_username = $proxy->get_username();
+                $proxy_password = $proxy->get_password();
+
+                if (! empty($proxy_server))
+                    curl_setopt($ch, CURLOPT_PROXY, $proxy_server);
+
+                if (! empty($proxy_port))
+                    curl_setopt($ch, CURLOPT_PROXYPORT, $proxy_port);
+
+                if (! empty($proxy_username))
+                    curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy_username . ':' . $proxy_password);
+            }
+
+            // Set main curl options
+            //----------------------
+
             curl_setopt($ch, CURLOPT_URL, $url . "?" . $data);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -382,6 +409,7 @@ class Rest extends Engine
             curl_setopt($ch, CURLOPT_FAILONERROR, 1);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
             curl_setopt($ch, CURLOPT_COOKIEJAR, CLEAROS_TEMP_DIR . "/cookie." . $this->CI->session->userdata('sdn_rest_id'));
             curl_setopt($ch, CURLOPT_COOKIEFILE, CLEAROS_TEMP_DIR . "/cookie." . $this->CI->session->userdata('sdn_rest_id'));
             $curl_response = chop(curl_exec($ch));
