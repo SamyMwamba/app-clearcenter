@@ -118,6 +118,7 @@ class Rest extends Engine
     protected $jws_version = 0;
     protected $jws_prefix = "";
     protected $CI = NULL;
+    protected $is_cli = FALSE;
 
     ///////////////////////////////////////////////////////////////////////////////
     // M E T H O D S
@@ -130,10 +131,15 @@ class Rest extends Engine
     function __construct()
     {
         clearos_profile(__METHOD__, __LINE__);
-        $this->CI =& get_instance();
-        // Don't change random range below without looking at regex in delete_cache function
-        if ($this->CI->session->userdata('sdn_rest_id') == NULL)
-            $this->CI->session->set_userdata(array('sdn_rest_id' => rand(10000, 10000000)));
+        // See how we were called...may not have session instance
+        if (php_sapi_name() === 'cli') {
+            $this->is_cli = TRUE;
+        } else {
+            $this->CI =& get_instance();
+            // Don't change random range below without looking at regex in delete_cache function
+            if ($this->CI->session->userdata('sdn_rest_id') == NULL)
+                $this->CI->session->set_userdata(array('sdn_rest_id' => rand(10000, 10000000)));
+        }
     }
 
     /**
@@ -217,6 +223,8 @@ class Rest extends Engine
     {
         clearos_profile(__METHOD__, __LINE__);
         try {
+            if ($this->is_cli)
+                return;
             $json = json_decode($result);
             if (!is_object($json) || $json->code !== 0)
                 return;
@@ -241,6 +249,8 @@ class Rest extends Engine
         clearos_profile(__METHOD__, __LINE__, $sig);
 
         try {
+            if ($this->is_cli)
+                return FALSE;
             // 2 hours in seconds
             $cache_time = 7200;
             $filename = CLEAROS_CACHE_DIR . "/" . md5($sig) . "." . $this->CI->session->userdata['sdn_rest_id']; 
@@ -294,6 +304,8 @@ class Rest extends Engine
     {
         clearos_profile(__METHOD__, __LINE__);
 
+        if ($this->is_cli)
+            return;
         $folder = new Folder(CLEAROS_CACHE_DIR);
         $listing = $folder->get_listing(TRUE);
         foreach ($listing as $element) {
@@ -354,11 +366,13 @@ class Rest extends Engine
             "&os_name=" . urlencode($this->os_name) . 
             "&language=" . $this->langcode;
 
-        if ($this->CI->session->userdata('sdn_token')) {
-            if (is_array($parameters))
-                $parameters['token'] = $this->CI->session->userdata('sdn_token');
-            else
-                $parameters = array('token' => $this->CI->session->userdata('sdn_token'));
+        if (!$this->is_cli) {
+            if ($this->CI->session->userdata('sdn_token')) {
+                if (is_array($parameters))
+                    $parameters['token'] = $this->CI->session->userdata('sdn_token');
+                else
+                    $parameters = array('token' => $this->CI->session->userdata('sdn_token'));
+            }
         }
             
         if (is_array($parameters)) {
@@ -410,8 +424,10 @@ class Rest extends Engine
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 
-            curl_setopt($ch, CURLOPT_COOKIEJAR, CLEAROS_TEMP_DIR . "/cookie." . $this->CI->session->userdata('sdn_rest_id'));
-            curl_setopt($ch, CURLOPT_COOKIEFILE, CLEAROS_TEMP_DIR . "/cookie." . $this->CI->session->userdata('sdn_rest_id'));
+            if (!$this->is_cli) {
+                curl_setopt($ch, CURLOPT_COOKIEJAR, CLEAROS_TEMP_DIR . "/cookie." . $this->CI->session->userdata('sdn_rest_id'));
+                curl_setopt($ch, CURLOPT_COOKIEFILE, CLEAROS_TEMP_DIR . "/cookie." . $this->CI->session->userdata('sdn_rest_id'));
+            }
             $curl_response = chop(curl_exec($ch));
             $error = curl_error($ch);
             $errno = curl_errno($ch);
@@ -423,7 +439,7 @@ class Rest extends Engine
             if ($errno == 0) {
                 // Check for token and other SDN variables we save in session
                 $json = json_decode($curl_response);
-                if ($json != NULL) {
+                if (!$this->is_cli && $json != NULL) {
                     if (! empty($json->sdn_username))
                         $this->CI->session->set_userdata(array('sdn_username' => $json->sdn_username));
                     if (! empty($json->sdn_org))
