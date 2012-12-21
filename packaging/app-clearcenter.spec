@@ -1,7 +1,7 @@
 
 Name: app-clearcenter
 Epoch: 1
-Version: 1.4.8
+Version: 1.4.10
 Release: 1%{dist}
 Summary: ClearCenter Base
 License: Proprietary
@@ -15,7 +15,7 @@ Requires: app-base
 The base system provides a core set of tools for software from ClearCenter.
 
 %package core
-Summary: ClearCenter Base - APIs and install
+Summary: ClearCenter Base - Core
 License: Proprietary
 Group: ClearOS/Libraries
 Requires: app-base-core
