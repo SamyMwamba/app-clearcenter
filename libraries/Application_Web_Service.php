@@ -150,7 +150,7 @@ class Application_Web_Service extends Web_Service
         $installtime = $rpm->get_install_time();
         $delta = time() - $installtime;
 
-        if (abs($delta) < '300')
+        if (abs($delta) < '172800')
             $this->_set_update_complete();
     }
 
