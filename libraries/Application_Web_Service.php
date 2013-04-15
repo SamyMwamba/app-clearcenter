@@ -47,6 +47,14 @@ clearos_load_library('base/Software');
 clearos_load_library('clearcenter/Marketplace_Yum');
 clearos_load_library('clearcenter/Web_Service');
 
+// Exceptions
+//-----------
+
+use \Exception as Exception;
+use \clearos\apps\base\Engine_Exception as Engine_Exception;
+
+clearos_load_library('base/Engine_Exception');
+
 ///////////////////////////////////////////////////////////////////////////////
 // C L A S S
 ///////////////////////////////////////////////////////////////////////////////
@@ -139,8 +147,12 @@ class Application_Web_Service extends Web_Service
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        $update = new Marketplace_Yum();
-        $update->install($this->package);
+        try {
+            $update = new Marketplace_Yum();
+            $update->install($this->package);
+        } catch (Exception $e) {
+            // Keep going, see note below.
+        }
 
         // Sanity check to see if RPM was installed
         // Since yum might come back "nothing to do / exit 0"
