@@ -4,9 +4,9 @@
 /**
  * ClearCenter Updates class.
  *
- * @category   Apps
- * @package    ClearCenter
- * @subpackage Scripts
+ * @category   apps
+ * @package    clearcenter
+ * @subpackage scripts
  * @author     ClearCenter <developer@clearcenter.com>
  * @copyright  2011-2013 ClearCenter
  * @license    http://www.clearcenter.com/app_license ClearCenter license

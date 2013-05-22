@@ -3,9 +3,9 @@
 /**
  * Marketplace yum install class.
  *
- * @category   Apps
- * @package    ClearCenter
- * @subpackage Libraries
+ * @category   apps
+ * @package    clearcenter
+ * @subpackage libraries
  * @author     ClearCenter <developer@clearcenter.com>
  * @copyright  2011 ClearCenter
  * @license    http://www.clearcenter.com/app_license ClearCenter license
@@ -60,9 +60,9 @@ clearos_load_library('base/Engine_Exception');
 /**
  * Marketplace yum install class.
  *
- * @category   Apps
- * @package    ClearCenter
- * @subpackage Libraries
+ * @category   apps
+ * @package    clearcenter
+ * @subpackage libraries
  * @author     ClearCenter <developer@clearcenter.com>
  * @copyright  2011 ClearCenter
  * @license    http://www.clearcenter.com/app_license ClearCenter license

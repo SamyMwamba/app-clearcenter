@@ -3,9 +3,9 @@
 /**
  * Rest class.
  *
- * @category   Apps
- * @package    ClearCenter
- * @subpackage Libraries
+ * @category   apps
+ * @package    clearcenter
+ * @subpackage libraries
  * @author     ClearCenter <developer@clearcenter.com>
  * @copyright  2011 ClearCenter
  * @license    http://www.clearcenter.com/app_license ClearCenter license
@@ -76,9 +76,9 @@ clearos_load_library('base/Validation_Exception');
 /**
  * Rest for ClearCenter web-services class.
  *
- * @category   Apps
- * @package    ClearCenter
- * @subpackage Libraries
+ * @category   apps
+ * @package    clearcenter
+ * @subpackage libraries
  * @author     ClearCenter <developer@clearcenter.com>
  * @copyright  2011 ClearCenter
  * @license    http://www.clearcenter.com/app_license ClearCenter license

@@ -3,9 +3,9 @@
 /**
  * Web service class.
  *
- * @category   Apps
- * @package    ClearCenter
- * @subpackage Libraries
+ * @category   apps
+ * @package    clearcenter
+ * @subpackage libraries
  * @author     ClearCenter <developer@clearcenter.com>
  * @copyright  2011 ClearCenter
  * @license    http://www.clearcenter.com/app_license ClearCenter license
@@ -81,9 +81,9 @@ clearos_load_library('clearcenter/Remote_Unavailable_Exception');
  * Dynamic VPN, software updates, content filter updates, and much more.
  * This class will be replaced by direct SOAP calls in the future.
  *
- * @category   Apps
- * @package    ClearCenter
- * @subpackage Libraries
+ * @category   apps
+ * @package    clearcenter
+ * @subpackage libraries
  * @author     ClearCenter <developer@clearcenter.com>
  * @copyright  2011 ClearCenter
  * @license    http://www.clearcenter.com/app_license ClearCenter license
