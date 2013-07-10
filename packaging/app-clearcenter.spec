@@ -1,7 +1,7 @@
 
 Name: app-clearcenter
 Epoch: 1
-Version: 1.4.35
+Version: 1.4.36
 Release: 1%{dist}
 Summary: ClearCenter Base
 License: Proprietary
@@ -21,6 +21,7 @@ Group: ClearOS/Libraries
 Requires: app-base-core
 Requires: app-language-core
 Requires: app-suva-core
+Requires: csplugin-audit
 Requires: webconfig-zend-guard-loader
 
 %description core

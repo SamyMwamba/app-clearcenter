@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'clearcenter';
-$app['version'] = '1.4.35';
+$app['version'] = '1.4.36';
 $app['release'] = '1';
 $app['vendor'] = 'ClearCenter';
 $app['packager'] = 'ClearCenter';
@@ -29,6 +29,7 @@ $app['menu_enabled'] = FALSE;
 $app['core_requires'] = array(
     'app-language-core',
     'app-suva-core',
+    'csplugin-audit',
     'webconfig-zend-guard-loader'
 );
 
