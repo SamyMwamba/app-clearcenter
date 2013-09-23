@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Core engine class for paid app API.
+ * Subscription manager class.
  *
  * @category   apps
  * @package    clearcenter
@@ -44,7 +44,7 @@ clearos_load_library('base/Engine');
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
- * Core engine class for paid app API.
+ * Subscription manager class.
  *
  * @category   apps
  * @package    clearcenter
@@ -55,14 +55,14 @@ clearos_load_library('base/Engine');
  * @link       http://www.clearcenter.com/support/documentation/clearos/clearcenter/
  */
 
-class License_Engine extends Engine
+class Subscription_Manager extends Engine
 {
     ///////////////////////////////////////////////////////////////////////////////
     // M E T H O D S
     ///////////////////////////////////////////////////////////////////////////////
 
     /**
-     * License engine constructor.
+     * Subscription engine constructor.
      */
 
     public function __construct()
@@ -71,16 +71,71 @@ class License_Engine extends Engine
     }
 
     /**
-     * Returns status of license limit.
+     * Returns subscription information.
      *
-     * @return boolean TRUE if limit reached or exceeded
-     * @throws Validation_Exception
+     * @return array subscription information
+     * @throws Engine_EXception
      */
 
-    public function limit_reached()
+    public function get_subscriptions()
     {
-        clearos_profile(__METHOD__, __LINE__);
+        $subscriptions = array();
 
-        return TRUE;
+        // FIXME: just test data below
+        $subscriptions['active_directory'] = array(
+            'app_name' => 'Active Directory Connector',
+            'used' => 49,
+            'total' => 50,
+            'available' => 1,
+            'marketplace_link' => 'active_directory',
+            'warning_message' => '45/50 connector licenses in use',
+            'type' => 'user'
+        );
+
+        $subscriptions['network_map'] = array(
+            'app_name' => 'Network Map',
+            'used' => 9,
+            'total' => 10,
+            'available' => 1,
+            'marketplace_link' => '',
+            'warning_message' => '19/20 mappings in use',
+            'type' => 'device'
+        );
+
+        $subscriptions['zarafa_small_business'] = array(
+            'app_name' => 'Zarafa Small Business',
+            'used' => 10,
+            'total' => 10,
+            'available' => 0,
+            'marketplace_link' => 'zarafa_small_business_5_users',
+            'warning_message' => '10/10 Zarafa user licenses in use',
+            'type' => 'user',
+            'user_extension' => 'zarafa',
+            'user_keys' => array('account_flag', 'administrator_flag'),
+        );
+
+        return $subscriptions;
+    }
+
+    /**
+     * Returns extension limits.
+     *
+     * @return array extension limits
+     * @throws Engine_EXception
+     */
+
+    public function get_extension_limits()
+    {
+        $limits = array();
+
+        // If zarafa and CAL available == 0, disable Zarafa extension to prevent user
+        // from borking they're Zarafa mail server by going over count.
+
+        // FIXME: just test data below
+        $limits['zarafa'] = array(
+            'user_key' => 'account_flag',
+        );
+
+        return $limits;
     }
 }

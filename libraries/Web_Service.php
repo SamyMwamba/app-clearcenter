@@ -113,7 +113,7 @@ class Web_Service extends Engine
     const CONSTANT_ASP = 'asp';
     const CONSTANT_NOT_REGISTERED = 20;
 
-    const PATH_SUBSCRIPTIONS = '/var/clearos/clearcenter/apps';
+    const PATH_APPS = '/var/clearos/clearcenter/apps';
     const FILE_REGISTERED = '/var/clearos/registration/registered';
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -138,7 +138,7 @@ class Web_Service extends Engine
         clearos_profile(__METHOD__, __LINE__);
 
         $this->service = $service;
-        $this->cachefile = self::PATH_SUBSCRIPTIONS . "/$service/subscription";
+        $this->cachefile = self::PATH_APPS . "/$service/subscription";
 
         include clearos_app_base('clearcenter') . '/deploy/config.php';
         $this->config = $config;
@@ -376,7 +376,7 @@ class Web_Service extends Engine
         // Cache info
         //-----------
 
-        $folder = new Folder(self::PATH_SUBSCRIPTIONS . "/$this->service");
+        $folder = new Folder(self::PATH_APPS . "/$this->service");
 
         if (! $folder->exists())
             $folder->create("suva", "suva", "0755");
