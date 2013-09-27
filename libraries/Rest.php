@@ -44,6 +44,7 @@ use \clearos\apps\base\File as File;
 use \clearos\apps\base\Folder as Folder;
 use \clearos\apps\base\OS as OS;
 use \clearos\apps\base\Product as Product;
+use \clearos\apps\base\Webconfig as Webconfig;
 use \clearos\apps\language\Locale as Locale;
 use \clearos\apps\base\Shell as Shell;
 use \clearos\apps\suva\Suva as Suva;
@@ -55,6 +56,7 @@ clearos_load_library('base/File');
 clearos_load_library('base/Folder');
 clearos_load_library('base/OS');
 clearos_load_library('base/Product');
+clearos_load_library('base/Webconfig');
 clearos_load_library('language/Locale');
 clearos_load_library('base/Shell');
 clearos_load_library('suva/Suva');
@@ -470,6 +472,10 @@ class Rest extends Engine
                 // Carry on ... We're going to throw an exception anyways
             }
             throw new Engine_Exception(lang('clearcenter_dns_lookup_failed'), CLEAROS_INFO);
+        } else if ($errno == CURLE_SSL_CACERT) {
+            // This is the "problem with the SSL CA cert (path? access rights)?" error
+            $webconfig = new Webconfig();
+            $webconfig->reset_gently();
         } else if ($errno == CURLE_OPERATION_TIMEOUTED) {
             throw new Engine_Exception(lang('clearcenter_unable_to_contact_remote_server'), CLEAROS_INFO);
         } else {

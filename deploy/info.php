@@ -27,6 +27,7 @@ $app['menu_enabled'] = FALSE;
 /////////////////////////////////////////////////////////////////////////////
 
 $app['core_requires'] = array(
+    'app-base-core >= 1:1.5.5',
     'app-language-core',
     'app-suva-core',
     'csplugin-audit',

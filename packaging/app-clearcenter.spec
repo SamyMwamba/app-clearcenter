@@ -19,6 +19,7 @@ Summary: ClearCenter Base - Core
 License: Proprietary
 Group: ClearOS/Libraries
 Requires: app-base-core
+Requires: app-base-core >= 1:1.5.5
 Requires: app-language-core
 Requires: app-suva-core
 Requires: csplugin-audit
