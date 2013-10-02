@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'clearcenter';
-$app['version'] = '1.5.0';
+$app['version'] = '1.5.5';
 $app['release'] = '1';
 $app['vendor'] = 'ClearCenter';
 $app['packager'] = 'ClearCenter';
@@ -51,4 +51,5 @@ $app['core_file_manifest'] = array(
 $app['core_directory_manifest'] = array( 
     '/var/clearos/clearcenter' => array(),
     '/var/clearos/clearcenter/apps' => array(),
+    '/var/clearos/clearcenter/subscriptions' => array(),
 );

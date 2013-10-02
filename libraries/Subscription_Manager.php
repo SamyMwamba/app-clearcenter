@@ -36,8 +36,10 @@ clearos_load_language('clearcenter');
 ///////////////////////////////////////////////////////////////////////////////
 
 use \clearos\apps\base\Engine as Engine;
+use \clearos\apps\base\Folder as Folder;
 
 clearos_load_library('base/Engine');
+clearos_load_library('base/Folder');
 
 ///////////////////////////////////////////////////////////////////////////////
 // C L A S S
@@ -57,6 +59,12 @@ clearos_load_library('base/Engine');
 
 class Subscription_Manager extends Engine
 {
+    ///////////////////////////////////////////////////////////////////////////////
+    // C O N S T A N T S
+    ///////////////////////////////////////////////////////////////////////////////
+
+    const PATH_SUBSCRIPTIONS = '/var/clearos/clearcenter/subscriptions';
+
     ///////////////////////////////////////////////////////////////////////////////
     // M E T H O D S
     ///////////////////////////////////////////////////////////////////////////////
@@ -79,7 +87,28 @@ class Subscription_Manager extends Engine
 
     public function get_subscriptions()
     {
+        clearos_profile(__METHOD__, __LINE__);
+
+        $folder = new Folder(self::PATH_SUBSCRIPTIONS);
+
+        $apps = $folder->get_listing();
         $subscriptions = array();
+
+        foreach ($apps as $basename) {
+            // Use the CodeIgniter philosophy of following a standard pattern
+            // when it comes to filenames, classes, etc.
+
+            $subscription_class = ucwords(preg_replace('/_/', ' ', $basename));
+            $subscription_class = preg_replace('/ /', '_', $subscription_class) . '_Subscription';
+            $subscription_full_class = '\clearos\apps\\' . $basename . '\\' . $subscription_class;
+
+            clearos_load_library($basename . '/' . $subscription_class);
+
+            $subscription = new $subscription_full_class();
+            
+            $info = $subscription->get_info();
+        }
+return;
 
         // FIXME: just test data below
         $subscriptions['active_directory'] = array(
@@ -126,6 +155,8 @@ class Subscription_Manager extends Engine
 
     public function get_extension_limits()
     {
+        clearos_profile(__METHOD__, __LINE__);
+
         $limits = array();
 
         // If zarafa and CAL available == 0, disable Zarafa extension to prevent user
