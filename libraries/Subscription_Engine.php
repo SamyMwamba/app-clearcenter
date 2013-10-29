@@ -58,6 +58,13 @@ clearos_load_library('base/Engine');
 class Subscription_Engine extends Engine
 {
     ///////////////////////////////////////////////////////////////////////////////
+    // C O N S T A N T S
+    ///////////////////////////////////////////////////////////////////////////////
+
+    const TYPE_USER = 'user';
+    const TYPE_DEVICE = 'device';
+
+    ///////////////////////////////////////////////////////////////////////////////
     // M E T H O D S
     ///////////////////////////////////////////////////////////////////////////////
 
@@ -68,19 +75,5 @@ class Subscription_Engine extends Engine
     public function __construct()
     {
         clearos_profile(__METHOD__, __LINE__);
-    }
-
-    /**
-     * Returns status of license limit.
-     *
-     * @return boolean TRUE if limit reached or exceeded
-     * @throws Validation_Exception
-     */
-
-    public function limit_reached()
-    {
-        clearos_profile(__METHOD__, __LINE__);
-
-        return TRUE;
     }
 }

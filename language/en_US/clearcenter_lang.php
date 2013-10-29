@@ -12,3 +12,4 @@ $lang['clearcenter_service_requires_an_update'] = 'Service requires an update.';
 $lang['clearcenter_service_is_up_to_date'] = 'Service is up-to-date.';
 $lang['clearcenter_service_update_failed:'] = 'Service update failed:';
 
+$lang['clearcenter_remaining_user_licenses:'] = 'Remaining User Licenses:';

@@ -37,9 +37,11 @@ clearos_load_language('clearcenter');
 
 use \clearos\apps\base\Engine as Engine;
 use \clearos\apps\base\Folder as Folder;
+use \clearos\apps\clearcenter\Subscription_Engine as Subscription_Engine;
 
 clearos_load_library('base/Engine');
 clearos_load_library('base/Folder');
+clearos_load_library('clearcenter/Subscription_Engine');
 
 ///////////////////////////////////////////////////////////////////////////////
 // C L A S S
@@ -94,10 +96,10 @@ class Subscription_Manager extends Engine
         $apps = $folder->get_listing();
         $subscriptions = array();
 
-        foreach ($apps as $basename) {
-            // Use the CodeIgniter philosophy of following a standard pattern
-            // when it comes to filenames, classes, etc.
+        // Use the CodeIgniter philosophy of following a standard pattern
+        // when it comes to filenames, classes, etc.
 
+        foreach ($apps as $basename) {
             $subscription_class = ucwords(preg_replace('/_/', ' ', $basename));
             $subscription_class = preg_replace('/ /', '_', $subscription_class) . '_Subscription';
             $subscription_full_class = '\clearos\apps\\' . $basename . '\\' . $subscription_class;
@@ -106,66 +108,37 @@ class Subscription_Manager extends Engine
 
             $subscription = new $subscription_full_class();
             
-            $info = $subscription->get_info();
+            $subscriptions[$basename] = $subscription->get_info();
+
+            if ($subscriptions[$basename]['available'] < 3) {
+                if ($subscriptions[$basename]['type'] === Subscription_Engine::TYPE_USER)
+                    $subscriptions[$basename]['warning_message'] = lang('clearcenter_remaining_user_licenses:') . ' ' .
+                        $subscriptions[$basename]['available'];
+            }
         }
-return;
-
-        // FIXME: just test data below
-        $subscriptions['active_directory'] = array(
-            'app_name' => 'Active Directory Connector',
-            'used' => 49,
-            'total' => 50,
-            'available' => 1,
-            'marketplace_link' => 'active_directory',
-            'warning_message' => '45/50 connector licenses in use',
-            'type' => 'user'
-        );
-
-        $subscriptions['network_map'] = array(
-            'app_name' => 'Network Map',
-            'used' => 9,
-            'total' => 10,
-            'available' => 1,
-            'marketplace_link' => '',
-            'warning_message' => '19/20 mappings in use',
-            'type' => 'device'
-        );
-
-        $subscriptions['zarafa_small_business'] = array(
-            'app_name' => 'Zarafa Small Business',
-            'used' => 10,
-            'total' => 10,
-            'available' => 0,
-            'marketplace_link' => 'zarafa_small_business_5_users',
-            'warning_message' => '10/10 Zarafa user licenses in use',
-            'type' => 'user',
-            'user_extension' => 'zarafa',
-            'user_keys' => array('account_flag', 'administrator_flag'),
-        );
 
         return $subscriptions;
     }
 
     /**
-     * Returns extension limits.
+     * Returns user limits.
      *
      * @return array extension limits
      * @throws Engine_EXception
      */
 
-    public function get_extension_limits()
+    public function get_user_limits()
     {
         clearos_profile(__METHOD__, __LINE__);
 
         $limits = array();
 
-        // If zarafa and CAL available == 0, disable Zarafa extension to prevent user
-        // from borking they're Zarafa mail server by going over count.
+        $subscriptions = $this->get_subscriptions();
 
-        // FIXME: just test data below
-        $limits['zarafa'] = array(
-            'user_key' => 'account_flag',
-        );
+        foreach ($subscriptions as $app => $details) {
+            if ($details['available'] === 0)
+                $limits = $details['user_limit'];
+        }
 
         return $limits;
     }
