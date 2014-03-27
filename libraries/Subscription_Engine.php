@@ -84,9 +84,10 @@ class Subscription_Engine extends Engine
     }
 
     /**
-     * 
+     * Get subscription updates from SDN.
      */
-    protected function _get_subscription_updates()
+
+    public function get_subscription_updates()
     {
         clearos_profile(__METHOD__, __LINE__);
         try {
