@@ -1,7 +1,7 @@
 
 Name: app-clearcenter
 Epoch: 1
-Version: 1.5.10
+Version: 1.5.11
 Release: 1%{dist}
 Summary: ClearCenter Base
 License: Proprietary
@@ -19,7 +19,7 @@ Summary: ClearCenter Base - Core
 License: Proprietary
 Group: ClearOS/Libraries
 Requires: app-base-core
-Requires: app-base-core >= 1:1.5.5
+Requires: app-base-core >= 1:1.5.31
 Requires: app-language-core
 Requires: app-suva-core
 Requires: csplugin-audit
@@ -41,6 +41,7 @@ cp -r * %{buildroot}/usr/clearos/apps/clearcenter/
 install -d -m 0755 %{buildroot}/var/clearos/clearcenter
 install -d -m 0755 %{buildroot}/var/clearos/clearcenter/apps
 install -d -m 0755 %{buildroot}/var/clearos/clearcenter/subscriptions
+install -D -m 0755 packaging/clearcenter-subscriptions %{buildroot}/usr/sbin/clearcenter-subscriptions
 install -D -m 0755 packaging/clearcenter-update %{buildroot}/usr/sbin/clearcenter-update
 install -D -m 0644 packaging/clearos-gpg-key %{buildroot}/etc/pki/rpm-gpg/clearos-gpg-key
 install -D -m 0644 packaging/license.ini %{buildroot}/usr/clearos/sandbox/etc/php.d/license.ini
@@ -76,14 +77,11 @@ exit 0
 
 %files
 %defattr(-,root,root)
-/usr/clearos/apps/clearcenter/controllers
 /usr/clearos/apps/clearcenter/htdocs
-/usr/clearos/apps/clearcenter/views
 
 %files core
 %defattr(-,root,root)
 %exclude /usr/clearos/apps/clearcenter/packaging
-%exclude /usr/clearos/apps/clearcenter/tests
 %dir /usr/clearos/apps/clearcenter
 %dir /var/clearos/clearcenter
 %dir /var/clearos/clearcenter/apps
@@ -91,6 +89,7 @@ exit 0
 /usr/clearos/apps/clearcenter/deploy
 /usr/clearos/apps/clearcenter/language
 /usr/clearos/apps/clearcenter/libraries
+/usr/sbin/clearcenter-subscriptions
 /usr/sbin/clearcenter-update
 /etc/pki/rpm-gpg/clearos-gpg-key
 /usr/clearos/sandbox/etc/php.d/license.ini

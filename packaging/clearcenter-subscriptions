@@ -1,0 +1,229 @@
+#!/usr/clearos/sandbox/usr/bin/php
+<?php
+
+/**
+ * ClearCenter Subscription check/update.
+ *
+ * @category   apps
+ * @package    clearcenter
+ * @subpackage scripts
+ * @author     ClearCenter <developer@clearcenter.com>
+ * @copyright  2011-2013 ClearCenter
+ * @license    http://www.clearcenter.com/app_license ClearCenter license
+ * @link       http://www.clearcenter.com/support/documentation/clearos/clearcenter/
+ */
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+// B O O T S T R A P
+///////////////////////////////////////////////////////////////////////////////
+
+$bootstrap = getenv('CLEAROS_BOOTSTRAP') ? getenv('CLEAROS_BOOTSTRAP') : '/usr/clearos/framework/shared';
+require_once $bootstrap . '/bootstrap.php';
+
+///////////////////////////////////////////////////////////////////////////////
+// T R A N S L A T I O N S
+///////////////////////////////////////////////////////////////////////////////
+
+clearos_load_language('base');
+clearos_load_language('clearcenter');
+
+///////////////////////////////////////////////////////////////////////////////
+// C O N S T A N T S
+///////////////////////////////////////////////////////////////////////////////
+
+const FILE_STATUS = 'clearcenter-subscriptions.json';
+
+///////////////////////////////////////////////////////////////////////////////
+// D E P E N D E N C I E S
+///////////////////////////////////////////////////////////////////////////////
+
+// Classes
+//--------
+
+use \clearos\apps\base\File as File;
+use \clearos\apps\base\Script as Script;
+use \clearos\apps\clearcenter\Rest as Rest;
+use \clearos\apps\clearcenter\Subscription_Engine as Subscription_Engine;
+
+clearos_load_library('base/File');
+clearos_load_library('base/Script');
+clearos_load_library('clearcenter/Rest');
+clearos_load_library('clearcenter/Subscription_Engine');
+
+// Exceptions
+//-----------
+
+use \Exception as Exception;
+
+///////////////////////////////////////////////////////////////////////////////
+// M A I N
+///////////////////////////////////////////////////////////////////////////////
+
+//--------------------------------------------------------------------
+// Command line options
+//--------------------------------------------------------------------
+
+$short_options  = '';
+
+// Common
+$short_options .= 'o::'; // Output
+$short_options .= 'h';   // Help
+
+$helpopts  = '
+  Common Options
+  --------------
+
+  -o=output (json [default] or stdout)
+  -h: help
+
+';
+
+// Handle command line options
+//----------------------------
+
+$options = getopt($short_options);
+
+$script = new Script();
+
+$output = isset($options['o']) ? $options['o'] : 'stdout';
+$help = isset($options['h']) ? TRUE : FALSE;
+
+if ($help) {
+    echo "usage: " . $argv[0] . " [options]\n";
+    echo $helpopts;
+    exit(0);
+}
+
+// Initialize status
+try {
+    $status = new File(CLEAROS_TEMP_DIR . "/" . FILE_STATUS, FALSE);
+
+    if ($script->lock() !== TRUE) {
+        update_status(1, 0, lang('base_script_already_running'));
+        exit(0);
+    } else {
+        if ($status->exists())
+            $status->delete();
+        if ($output == 'json')
+            $status->create('webconfig', 'webconfig', 644);
+    }
+    get_subscription_update();
+    $script->unlock();
+    exit(0);
+} catch (Exception $e) {
+    update_status(-1, 0, clearos_exception_message($e));
+    $script->unlock();
+    exit(1);
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// F U N C T I O N S
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Get subscription updates.
+ *
+ * @return void
+ */
+
+function get_subscription_update()
+{
+    global $status;
+    global $output;
+
+    $rest = new Rest();
+
+    $cache_time = Subscription_Engine::CACHE_TIME_SECONDS;
+    $filename = CLEAROS_TEMP_DIR . '/' . Subscription_Engine::FILE_CACHE_TIMESTAMP;
+
+    if (file_exists($filename))
+        $lastmod = filemtime($filename);
+    else
+        $lastmod = 0;
+
+    //if (php_sapi_name() != 'cli' && $lastmod && (time() - $lastmod < $cache_time)) {
+    if ($lastmod && (time() - $lastmod < $cache_time)) {
+        update_status(0, 100, lang('clearcenter_subscription_update_complete') . ' [cached]');
+        return;
+    }
+
+    update_status(0, 0, lang('clearcenter_connecting_to_sdn'));
+
+    try {
+        $response = json_decode($rest->request('sdn', 'get_license_count'));
+        if ($response->code == 0) {
+            $apps = $response->apps;
+            $counter = 0;
+            foreach ($apps as $basename => $info) {
+                $file = new File(Subscription_Engine::FOLDER_SUBSCRIPTIONS . '/' . $basename, TRUE, TRUE);
+                if ($file->exists())
+                    $file->delete();
+                $file->create('root','root','644');
+                $file->add_lines(serialize($info) . "\n");
+                $file->move_to(Subscription_Engine::FOLDER_SUBSCRIPTIONS . '/' . $basename);
+                $counter++;
+                update_status(0, $counter/count($apps) * 100, $basename . ' OK');
+            }
+        } else {
+            update_status(1, 0, $response->errmsg);
+        }
+
+        $file = new File(CLEAROS_TEMP_DIR . '/' . Subscription_Engine::FILE_CACHE_TIMESTAMP);
+        if ($file->exists())
+            $file->delete();
+        $file->create('webconfig','webconfig', 644);
+        update_status(0, 100, lang('clearcenter_subscription_update_complete'));
+    } catch (Exception $e) {
+        update_status(1, 0, clearos_exception_message($e));
+    }
+}
+
+/**
+ * Update status.
+ *
+ * @param string $code     status code
+ * @param string $progress progress
+ * @param string $msg      status message
+ *
+ * @return void
+ */
+
+function update_status($code, $progress, $msg)
+{
+    global $status;
+    global $output;
+
+    if ($output == 'stdout') {
+        echo $msg . "\n";
+        if ($code != 0)
+            clearos_log('clearcenter-subscriptions', 'ClearCenter Subscription update failed: ' . $msg);
+    } else {
+        $info = array (
+            'code' => $code,
+            'timestamp' => time(),
+            'progress' => $progress,
+            'msg' => $msg
+        );
+        $status->add_lines(json_encode($info) . "\n"); 
+    }
+}
+
+// vim: syntax=php

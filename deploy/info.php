@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'clearcenter';
-$app['version'] = '1.5.10';
+$app['version'] = '1.5.11';
 $app['release'] = '1';
 $app['vendor'] = 'ClearCenter';
 $app['packager'] = 'ClearCenter';
@@ -27,7 +27,7 @@ $app['menu_enabled'] = FALSE;
 /////////////////////////////////////////////////////////////////////////////
 
 $app['core_requires'] = array(
-    'app-base-core >= 1:1.5.5',
+    'app-base-core >= 1:1.5.31',
     'app-language-core',
     'app-suva-core',
     'csplugin-audit',
@@ -37,6 +37,10 @@ $app['core_requires'] = array(
 $app['core_file_manifest'] = array( 
     'clearcenter-update' => array(
         'target' => '/usr/sbin/clearcenter-update',
+        'mode' => '0755',
+    ),
+    'clearcenter-subscriptions' => array(
+        'target' => '/usr/sbin/clearcenter-subscriptions',
         'mode' => '0755',
     ),
     'marketplace_version_ctl.sh' => array(

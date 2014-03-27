@@ -36,8 +36,10 @@ clearos_load_language('clearcenter');
 ///////////////////////////////////////////////////////////////////////////////
 
 use \clearos\apps\base\Engine as Engine;
+use \clearos\apps\base\Shell as Shell;
 
 clearos_load_library('base/Engine');
+clearos_load_library('base/Shell');
 
 ///////////////////////////////////////////////////////////////////////////////
 // C L A S S
@@ -63,6 +65,10 @@ class Subscription_Engine extends Engine
 
     const TYPE_USER = 'user';
     const TYPE_DEVICE = 'device';
+    const CACHE_TIME_SECONDS = 600;
+    const FILE_CACHE_TIMESTAMP = '.clearcenter_subscriptions';
+    const FOLDER_SUBSCRIPTIONS = '/var/clearos/clearcenter/subscriptions';
+    const CMD_CLEAR_SUB_UPDATE = '/usr/sbin/clearcenter-subscriptions';
 
     ///////////////////////////////////////////////////////////////////////////////
     // M E T H O D S
@@ -75,5 +81,24 @@ class Subscription_Engine extends Engine
     public function __construct()
     {
         clearos_profile(__METHOD__, __LINE__);
+    }
+
+    /**
+     * 
+     */
+    protected function _get_subscription_updates()
+    {
+        clearos_profile(__METHOD__, __LINE__);
+        try {
+            $options = array(
+                'background' => TRUE,
+                'env' => 'LANG=en_US'
+            );
+            // We don't hang around on this since it could impede UI
+            $shell = new Shell();
+            $shell->execute(self::CMD_CLEAR_SUB_UPDATE, '', FALSE, $options);
+        } catch (Exception $e) {
+            clearos_log('clearcenter', 'ClearCenter Subscription update failed: ' . clearos_exception_message($e));            
+        }
     }
 }
