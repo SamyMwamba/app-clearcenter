@@ -36,9 +36,11 @@ clearos_load_language('clearcenter');
 ///////////////////////////////////////////////////////////////////////////////
 
 use \clearos\apps\base\Engine as Engine;
+use \clearos\apps\base\File as File;
 use \clearos\apps\base\Shell as Shell;
 
 clearos_load_library('base/Engine');
+clearos_load_library('base/File');
 clearos_load_library('base/Shell');
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -85,12 +87,23 @@ class Subscription_Engine extends Engine
 
     /**
      * Get subscription updates from SDN.
+     *
+     * @param boolean clear_cache Flag to clear cache
+     *
+     * @return void
      */
 
-    public function get_subscription_updates()
+    public function get_subscription_updates($clear_cache = FALSE)
     {
         clearos_profile(__METHOD__, __LINE__);
         try {
+
+            if ($clear_cache) {
+                $file = new File(CLEAROS_TEMP_DIR . '/' . self::FILE_CACHE_TIMESTAMP);
+                if ($file->exists())
+                    $file->delete();
+            }
+
             $options = array(
                 'background' => TRUE,
                 'env' => 'LANG=en_US'
