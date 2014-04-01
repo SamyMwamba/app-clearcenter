@@ -31,7 +31,6 @@ $app['core_requires'] = array(
     'app-language-core',
     'app-suva-core',
     'csplugin-audit',
-    'webconfig-zend-guard-loader'
 );
 
 $app['core_file_manifest'] = array( 

@@ -23,7 +23,6 @@ Requires: app-base-core >= 1:1.5.31
 Requires: app-language-core
 Requires: app-suva-core
 Requires: csplugin-audit
-Requires: webconfig-zend-guard-loader
 
 %description core
 The base system provides a core set of tools for software from ClearCenter.
