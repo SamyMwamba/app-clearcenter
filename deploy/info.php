@@ -31,6 +31,7 @@ $app['core_requires'] = array(
     'app-language-core',
     'app-suva-core',
     'csplugin-audit',
+    'yum-marketplace-plugin',
 );
 
 $app['core_file_manifest'] = array( 

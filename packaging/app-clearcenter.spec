@@ -23,6 +23,7 @@ Requires: app-base-core >= 1:1.5.31
 Requires: app-language-core
 Requires: app-suva-core
 Requires: csplugin-audit
+Requires: yum-marketplace-plugin
 
 %description core
 The base system provides a core set of tools for software from ClearCenter.
