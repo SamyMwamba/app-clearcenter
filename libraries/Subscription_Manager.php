@@ -104,6 +104,10 @@ class Subscription_Manager extends Engine
             $subscription_class = preg_replace('/ /', '_', $subscription_class) . '_Subscription';
             $subscription_full_class = '\clearos\apps\\' . $basename . '\\' . $subscription_class;
 
+            // Don't want to die here if app was un-installed.
+            if (!class_exists($basename . '/' . $subscription_class))
+                continue;
+
             clearos_load_library($basename . '/' . $subscription_class);
 
             $subscription = new $subscription_full_class();
