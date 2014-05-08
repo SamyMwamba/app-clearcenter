@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'clearcenter';
-$app['version'] = '1.5.13';
+$app['version'] = '1.6.0';
 $app['release'] = '1';
 $app['vendor'] = 'ClearCenter';
 $app['packager'] = 'ClearCenter';
@@ -26,8 +26,12 @@ $app['menu_enabled'] = FALSE;
 // Packaging
 /////////////////////////////////////////////////////////////////////////////
 
+// TODO: the app-edition dependency is kludgy.  Better to do this in the 
+// build system.
+
 $app['core_requires'] = array(
     'app-base-core >= 1:1.5.31',
+    'app-edition',
     'app-language-core',
     'app-suva-core',
     'csplugin-audit',

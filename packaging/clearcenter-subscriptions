@@ -116,7 +116,7 @@ try {
     $status = new File(CLEAROS_TEMP_DIR . "/" . FILE_STATUS, FALSE);
 
     if ($script->lock() !== TRUE) {
-        update_status(1, 0, lang('base_script_already_running'));
+        update_status(1, 0, lang('base_software_already_running'));
         exit(0);
     } else {
         if ($status->exists())
