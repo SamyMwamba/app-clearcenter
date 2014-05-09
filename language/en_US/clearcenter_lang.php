@@ -2,7 +2,7 @@
 
 $lang['clearcenter_app_description'] = 'The base system provides a core set of tools for software from ClearCenter.';
 $lang['clearcenter_app_name'] = 'ClearCenter Base';
-$lang['clearcenter_connecting_to_sdn'] = 'Connecting to ClearCenter SDN...';
+$lang['clearcenter_connecting_to_sdn'] = 'Connecting to ClearCenter...';
 $lang['clearcenter_connection_failed:'] = 'Connection failed:';
 $lang['clearcenter_dns_lookup_failed'] = 'DNS lookup failed.';
 $lang['clearcenter_information_from_remote_network_not_available'] = 'Information from remote network is not available.';
