@@ -165,7 +165,7 @@ function get_subscription_update()
         return;
     }
 
-    update_status(0, 0, lang('clearcenter_connecting_to_sdn'));
+    update_status(0, 0, lang('clearcenter_connecting_to_clearcenter'));
 
     try {
         $response = json_decode($rest->request('sdn', 'get_license_count'));
