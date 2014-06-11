@@ -93,6 +93,9 @@ class Subscription_Manager extends Engine
 
         $folder = new Folder(self::PATH_SUBSCRIPTIONS);
 
+        if (! $folder->exists())
+            return array();
+
         $apps = $folder->get_listing();
         $subscriptions = array();
 
