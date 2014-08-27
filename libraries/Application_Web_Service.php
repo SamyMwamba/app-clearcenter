@@ -40,20 +40,17 @@ clearos_load_language('clearcenter');
 //--------
 
 use \clearos\apps\base\Software as Software;
-use \clearos\apps\clearcenter\Marketplace_Yum as Marketplace_Yum;
+use \clearos\apps\base\Yum as Yum;
 use \clearos\apps\clearcenter\Web_Service as Web_Service;
 
 clearos_load_library('base/Software');
-clearos_load_library('clearcenter/Marketplace_Yum');
+clearos_load_library('base/Yum');
 clearos_load_library('clearcenter/Web_Service');
 
 // Exceptions
 //-----------
 
 use \Exception as Exception;
-use \clearos\apps\base\Engine_Exception as Engine_Exception;
-
-clearos_load_library('base/Engine_Exception');
 
 ///////////////////////////////////////////////////////////////////////////////
 // C L A S S
@@ -148,8 +145,8 @@ class Application_Web_Service extends Web_Service
         clearos_profile(__METHOD__, __LINE__);
 
         try {
-            $update = new Marketplace_Yum();
-            $update->install($this->package);
+            $update = new Yum();
+            $update->install(array($this->package), FALSE);
         } catch (Exception $e) {
             // Keep going, see note below.
         }

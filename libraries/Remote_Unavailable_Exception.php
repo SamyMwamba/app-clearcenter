@@ -58,7 +58,7 @@ clearos_load_library('base/Engine_Exception');
 class Remote_Unavailable_Exception extends Engine_Exception
 {
     /**
-     * Remote_Unvailable constructor.
+     * Remote_Unavailable constructor.
      */
 
     public function __construct()
