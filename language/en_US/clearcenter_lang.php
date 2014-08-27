@@ -6,6 +6,7 @@ $lang['clearcenter_connection_failed:'] = 'Connection failed:';
 $lang['clearcenter_connecting_to_sdn'] = 'Connecting to ClearCenter SDN...';
 $lang['clearcenter_unable_to_contact_remote_server'] = 'Unable to contact remote server.';
 $lang['clearcenter_dns_lookup_failed'] = 'DNS lookup failed.';
+$lang['clearcenter_file_not_found'] = 'File not found';
 $lang['clearcenter_information_from_remote_network_not_available'] = 'Information from remote network is not available.';
 $lang['clearcenter_system_not_registered'] = 'System is not registered.';
 

@@ -165,7 +165,7 @@ class Rest extends Engine
     
             $result = $this->request('sdn', 'get_sdn_info');
 
-            $this->_save_to_cache($cachekey, $result);
+            $this->_save_to_cache($cachekey, $result, 'sdn-');
 
             return $result;
         } catch (Exception $e) {
@@ -215,13 +215,14 @@ class Rest extends Engine
      *
      * @param string $sig    signature
      * @param string $result cached data
+     * @param string $prefix filename prefix allowing easy filter/identification
      *
      * @access private
      *
      * @return void
      */
 
-    protected function _save_to_cache($sig, $result)
+    protected function _save_to_cache($sig, $result, $prefix = '')
     {
         clearos_profile(__METHOD__, __LINE__);
         try {
@@ -230,7 +231,7 @@ class Rest extends Engine
             $json = json_decode($result);
             if (!is_object($json) || $json->code !== 0)
                 return;
-            file_put_contents(CLEAROS_CACHE_DIR . "/" . md5($sig) . "." . $this->CI->session->userdata['sdn_rest_id'], $result);
+            file_put_contents(CLEAROS_CACHE_DIR . "/" . $prefix . md5($sig), $result);
         } catch (Exception $e) {
             throw new Engine_Exception(clearos_exception_message($e), CLEAROS_WARNING);
         }
@@ -239,14 +240,15 @@ class Rest extends Engine
     /**
      * Check the cache availability
      *
-     * @param string $sig signature
+     * @param string $sig    signature
+     * @param string $prefix filename prefix allowing easy filter/identification
      *
      * @access private
      *
      * @return boolean true if cached data available
      */
 
-    protected function _check_cache($sig)
+    protected function _check_cache($sig, $prefix = '')
     {
         clearos_profile(__METHOD__, __LINE__, $sig);
 
@@ -255,7 +257,7 @@ class Rest extends Engine
                 return FALSE;
             // 2 hours in seconds
             $cache_time = 7200;
-            $filename = CLEAROS_CACHE_DIR . "/" . md5($sig) . "." . $this->CI->session->userdata['sdn_rest_id']; 
+            $filename = CLEAROS_CACHE_DIR . "/" . $prefix . md5($sig);
 
             if (file_exists($filename))
                 $lastmod = filemtime($filename);
@@ -294,39 +296,31 @@ class Rest extends Engine
     /**
      * Deletes a cache file.
      *
-     * @param string  $filename  a filename or set to NULL for all cache files
-     * @param boolean $force_all flag to delete all cache files created by this library
+     * @param string $filename a filename or set to NULL for all cache files
+     * @param string $prefix   filename prefix allowing easy filter/identification
      *
      * @return array information
      *
      * @throws Engine_Exception
      */
 
-    public function delete_cache($filename = NULL, $force_all = FALSE)
+    public function delete_cache($filename = NULL, $prefix = NULL)
     {
         clearos_profile(__METHOD__, __LINE__);
 
         if ($this->is_cli)
             return;
+
         $folder = new Folder(CLEAROS_CACHE_DIR);
         $listing = $folder->get_listing(TRUE);
         foreach ($listing as $element) {
-            if ($force_all) {
-                if (preg_match("/^app-logo.*\.png$/", $element['name'])) {
-                    // Delete app logos
-                } else if (preg_match("/^app-screenshots.*\.png$/", $element['name'])) {
-                    // Delete app screenshots
-                } else if (preg_match("/^app-.*\.[\d]{5,8}$/", $element['name'])) {
-                    // Delete app cart info
-                } else if (preg_match("/^[a-f0-9]{32}\.[\d]{5,8}$/", $element['name'])) {
-                    // Delete app cart info
-                } else {
-                    // Don't delete anything else
-                    continue;
-                }
-            } else if ($filename == NULL && !preg_match("/.*" . $this->CI->session->userdata['sdn_rest_id'] . "$/", $element['name'])) {
+            if ($filename == NULL && $prefix == NULL) {
+                // Deleting everything in folder
+            } else if ($filename == NULL && $prefix != NULL && !preg_match("/^$prefix/", $element['name'])) {
+                // Prefix did not match...don't delete
                 continue;
             } else if ($filename != NULL && $filename != $element['name']) {
+                // Filename did not match...don't delete
                 continue;
             }
             $file = new File(CLEAROS_CACHE_DIR . "/" . $element['name']);
