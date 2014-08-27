@@ -38,10 +38,8 @@ clearos_load_language('clearcenter');
 // Classes
 //--------
 
-use \clearos\apps\\\clearos\apps\upstream_proxy\Proxy as \clearos\apps\upstream_proxy\Proxy;
 use \clearos\apps\base\Engine as Engine;
 
-clearos_load_library('/\clearos\apps\upstream_proxy\Proxy');
 clearos_load_library('base/Engine');
 
 // Exceptions
