@@ -329,8 +329,11 @@ class Rest extends Engine
             } else if ($filename != NULL && $filename != $element['name']) {
                 continue;
             }
+
             $file = new File(CLEAROS_CACHE_DIR . "/" . $element['name']);
-            $file->delete();
+
+            if ($file->exists())
+                $file->delete();
         }
     }
 
