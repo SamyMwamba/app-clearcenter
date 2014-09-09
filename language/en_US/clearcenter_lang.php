@@ -5,6 +5,7 @@ $lang['clearcenter_app_name'] = 'ClearCenter Base';
 $lang['clearcenter_connecting_to_clearcenter'] = 'Connecting to ClearCenter...';
 $lang['clearcenter_connection_failed:'] = 'Connection failed:';
 $lang['clearcenter_dns_lookup_failed'] = 'DNS lookup failed.';
+$lang['clearcenter_file_not_found'] = 'File not found';
 $lang['clearcenter_information_from_remote_network_not_available'] = 'Information from remote network is not available.';
 $lang['clearcenter_remaining_user_licenses:'] = 'Remaining User Licenses:';
 $lang['clearcenter_service_is_up_to_date'] = 'Service is up-to-date.';
