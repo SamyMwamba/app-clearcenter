@@ -475,7 +475,7 @@ class Rest extends Engine
                 // Carry on ... We're going to throw an exception anyways
             }
             throw new Engine_Exception(lang('clearcenter_dns_lookup_failed'), CLEAROS_INFO);
-        } else if ($errno == CURLE_SSL_CACERT) {
+        } else if ($errno == CURLE_SSL_CACERT || $errno == 77) {
             // This is the "problem with the SSL CA cert (path? access rights)?" error
             $webconfig = new Webconfig();
             $webconfig->reset_gently();
