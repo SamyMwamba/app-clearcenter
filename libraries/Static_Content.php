@@ -156,7 +156,7 @@ class Static_Content extends Engine
             return $curl_response;
 
         if ($httpCode == 404)
-            throw new Engine_Exception(lang('clearcenter_file_not_found') . " ($filename).", CLEAROS_INFO);
+            throw new Engine_Exception(lang('base_file_not_found') . " ($filename).", CLEAROS_INFO);
         else if ($errno == CURLE_COULDNT_RESOLVE_HOST)
             throw new Engine_Exception(lang('clearcenter_dns_lookup_failed'), CLEAROS_INFO);
         else if ($errno == CURLE_OPERATION_TIMEOUTED)
