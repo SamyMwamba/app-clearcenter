@@ -1,7 +1,7 @@
 
 Name: app-clearcenter
 Epoch: 1
-Version: 2.0.1
+Version: 2.0.5
 Release: 1%{dist}
 Summary: ClearCenter Base
 License: Proprietary
