@@ -44,8 +44,6 @@ install -d -m 0755 %{buildroot}/var/clearos/clearcenter/subscriptions
 install -D -m 0755 packaging/clearcenter-subscriptions %{buildroot}/usr/sbin/clearcenter-subscriptions
 install -D -m 0755 packaging/clearcenter-update %{buildroot}/usr/sbin/clearcenter-update
 install -D -m 0644 packaging/clearos-gpg-key %{buildroot}/etc/pki/rpm-gpg/clearos-gpg-key
-install -D -m 0644 packaging/license.ini %{buildroot}/usr/clearos/sandbox/etc/php.d/license.ini
-install -D -m 0644 packaging/license.zl %{buildroot}/var/clearos/clearcenter/license.zl
 install -D -m 0755 packaging/marketplace_version_ctl.sh %{buildroot}/usr/sbin/marketplace_version_ctl.sh
 
 %post
@@ -92,6 +90,4 @@ exit 0
 /usr/sbin/clearcenter-subscriptions
 /usr/sbin/clearcenter-update
 /etc/pki/rpm-gpg/clearos-gpg-key
-/usr/clearos/sandbox/etc/php.d/license.ini
-/var/clearos/clearcenter/license.zl
 /usr/sbin/marketplace_version_ctl.sh

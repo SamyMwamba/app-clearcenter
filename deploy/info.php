@@ -48,8 +48,6 @@ $app['core_file_manifest'] = array(
         'mode' => '0755',
     ),
     'clearos-gpg-key' => array('target' => '/etc/pki/rpm-gpg/clearos-gpg-key'),
-    'license.ini' => array('target' => '/usr/clearos/sandbox/etc/php.d/license.ini'),
-    'license.zl' => array('target' => '/var/clearos/clearcenter/license.zl'),
 );
 
 $app['core_directory_manifest'] = array( 
