@@ -20,7 +20,6 @@ License: Proprietary
 Group: ClearOS/Libraries
 Requires: app-base-core
 Requires: app-base-core >= 1:1.5.31
-Requires: app-edition
 Requires: app-language-core
 Requires: app-suva-core
 Requires: csplugin-audit
