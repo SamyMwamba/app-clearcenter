@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'clearcenter';
-$app['version'] = '2.1.6';
+$app['version'] = '2.1.14';
 $app['release'] = '1';
 $app['vendor'] = 'ClearCenter';
 $app['packager'] = 'ClearCenter';
@@ -35,6 +35,7 @@ $app['core_requires'] = array(
 );
 
 $app['core_file_manifest'] = array( 
+    'clearos-fast-updates.repo' => array( 'target' => '/etc/yum.repos.d/clearos-fast-updates.repo' ),
     'clearcenter-update' => array(
         'target' => '/usr/sbin/clearcenter-update',
         'mode' => '0755',
