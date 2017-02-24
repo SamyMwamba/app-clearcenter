@@ -195,7 +195,7 @@ function details()
         }
 
         if (!isset($options['id'])) {
-            echo "\033[" . $colours['yellow'] . "mNo id supplied...fetching most recent entry.\033[0m\n";
+            echo "\033[" . $colours['yellow'] . "mNo id supplied... fetching most recent entry.\033[0m\n";
             echo "Use --id=n (n is ID from get_versions) to retrieve older versions.\n";
         }
         $extras = array(
