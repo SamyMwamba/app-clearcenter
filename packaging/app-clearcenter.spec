@@ -1,7 +1,7 @@
 
 Name: app-clearcenter
 Epoch: 1
-Version: 2.3.1
+Version: 2.3.20
 Release: 1%{dist}
 Summary: ClearCenter Base
 License: Proprietary
@@ -81,6 +81,7 @@ exit 0
 %files core
 %defattr(-,root,root)
 %exclude /usr/clearos/apps/clearcenter/packaging
+%exclude /usr/clearos/apps/clearcenter/unify.json
 %dir /usr/clearos/apps/clearcenter
 %dir /var/clearos/clearcenter
 %dir /var/clearos/clearcenter/apps
