@@ -38,38 +38,37 @@ clearos_load_language('clearcenter');
 // Classes
 //--------
 
-use \clearos\apps\base\Configuration_File as Configuration_File;
+use \clearos\apps\base\Daemon as Daemon;
 use \clearos\apps\base\Engine as Engine;
 use \clearos\apps\base\File as File;
 use \clearos\apps\base\Folder as Folder;
 use \clearos\apps\base\OS as OS;
 use \clearos\apps\base\Product as Product;
+use \clearos\apps\base\Shell as Shell;
 use \clearos\apps\base\Webconfig as Webconfig;
 use \clearos\apps\language\Locale as Locale;
-use \clearos\apps\base\Shell as Shell;
+use \clearos\apps\network\Proxy as Proxy;
 use \clearos\apps\suva\Suva as Suva;
-use \clearos\apps\base\Daemon as Daemon;
 
-clearos_load_library('base/Configuration_File');
+clearos_load_library('base/Daemon');
 clearos_load_library('base/Engine');
 clearos_load_library('base/File');
 clearos_load_library('base/Folder');
 clearos_load_library('base/OS');
 clearos_load_library('base/Product');
+clearos_load_library('base/Shell');
 clearos_load_library('base/Webconfig');
 clearos_load_library('language/Locale');
-clearos_load_library('base/Shell');
+clearos_load_library('network/Proxy');
 clearos_load_library('suva/Suva');
-clearos_load_library('base/Daemon');
 
 // Exceptions
 //-----------
 
+use \Exception as Exception;
 use \clearos\apps\base\Engine_Exception as Engine_Exception;
-use \clearos\apps\base\Validation_Exception as Validation_Exception;
 
 clearos_load_library('base/Engine_Exception');
-clearos_load_library('base/Validation_Exception');
 
 ///////////////////////////////////////////////////////////////////////////////
 // C L A S S
@@ -392,25 +391,21 @@ class Rest extends Engine
             // Check for upstream proxy settings
             //----------------------------------
 
-            if (clearos_app_installed('upstream_proxy')) {
-                clearos_load_library('upstream_proxy/Proxy');
+            $proxy = new Proxy();
 
-                $proxy = new \clearos\apps\upstream_proxy\Proxy();
+            $proxy_server = $proxy->get_server();
+            $proxy_port = $proxy->get_port();
+            $proxy_username = $proxy->get_username();
+            $proxy_password = $proxy->get_password();
 
-                $proxy_server = $proxy->get_server();
-                $proxy_port = $proxy->get_port();
-                $proxy_username = $proxy->get_username();
-                $proxy_password = $proxy->get_password();
+            if (! empty($proxy_server))
+                curl_setopt($ch, CURLOPT_PROXY, $proxy_server);
 
-                if (! empty($proxy_server))
-                    curl_setopt($ch, CURLOPT_PROXY, $proxy_server);
+            if (! empty($proxy_port))
+                curl_setopt($ch, CURLOPT_PROXYPORT, $proxy_port);
 
-                if (! empty($proxy_port))
-                    curl_setopt($ch, CURLOPT_PROXYPORT, $proxy_port);
-
-                if (! empty($proxy_username))
-                    curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy_username . ':' . $proxy_password);
-            }
+            if (! empty($proxy_username))
+                curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy_username . ':' . $proxy_password);
 
             // Set main curl options
             //----------------------

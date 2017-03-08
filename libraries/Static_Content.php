@@ -39,8 +39,10 @@ clearos_load_language('clearcenter');
 //--------
 
 use \clearos\apps\base\Engine as Engine;
+use \clearos\apps\network\Proxy as Proxy;
 
 clearos_load_library('base/Engine');
+clearos_load_library('network/Proxy');
 
 // Exceptions
 //-----------
@@ -114,25 +116,21 @@ class Static_Content extends Engine
         // Check for upstream proxy settings
         //----------------------------------
 
-        if (clearos_app_installed('upstream_proxy')) {
-            clearos_load_library('upstream_proxy/Proxy');
+        $proxy = new Proxy();
 
-            $proxy = new \clearos\apps\upstream_proxy\Proxy();
+        $proxy_server = $proxy->get_server();
+        $proxy_port = $proxy->get_port();
+        $proxy_username = $proxy->get_username();
+        $proxy_password = $proxy->get_password();
 
-            $proxy_server = $proxy->get_server();
-            $proxy_port = $proxy->get_port();
-            $proxy_username = $proxy->get_username();
-            $proxy_password = $proxy->get_password();
+        if (! empty($proxy_server))
+            curl_setopt($ch, CURLOPT_PROXY, $proxy_server);
 
-            if (! empty($proxy_server))
-                curl_setopt($ch, CURLOPT_PROXY, $proxy_server);
+        if (! empty($proxy_port))
+            curl_setopt($ch, CURLOPT_PROXYPORT, $proxy_port);
 
-            if (! empty($proxy_port))
-                curl_setopt($ch, CURLOPT_PROXYPORT, $proxy_port);
-
-            if (! empty($proxy_username))
-                curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy_username . ':' . $proxy_password);
-        }
+        if (! empty($proxy_username))
+            curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy_username . ':' . $proxy_password);
 
         // Set main curl options
         //----------------------
