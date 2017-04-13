@@ -84,6 +84,7 @@ $short_options  = '';
 
 // Common
 $short_options .= 'o::'; // Output
+$short_options .= 'n::'; // No cache
 $short_options .= 'h';   // Help
 
 $helpopts  = '
@@ -91,6 +92,7 @@ $helpopts  = '
   --------------
 
   -o=output (json [default] or stdout)
+  -n=no cache
   -h: help
 
 ';
@@ -103,6 +105,7 @@ $options = getopt($short_options);
 $script = new Script();
 
 $output = isset($options['o']) ? $options['o'] : 'stdout';
+$nocache = isset($options['n']) ? TRUE : FALSE;
 $help = isset($options['h']) ? TRUE : FALSE;
 
 if ($help) {
@@ -148,6 +151,7 @@ function get_subscription_update()
 {
     global $status;
     global $output;
+    global $nocache;
 
     $rest = new Rest();
 
@@ -159,8 +163,7 @@ function get_subscription_update()
     else
         $lastmod = 0;
 
-    //if (php_sapi_name() != 'cli' && $lastmod && (time() - $lastmod < $cache_time)) {
-    if ($lastmod && (time() - $lastmod < $cache_time)) {
+    if (!$nocache && php_sapi_name() == 'cli' && $lastmod && (time() - $lastmod < $cache_time)) {
         update_status(0, 100, lang('clearcenter_subscription_update_complete') . ' [cached]');
         return;
     }
