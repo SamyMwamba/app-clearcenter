@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'clearcenter';
-$app['version'] = '2.3.29';
+$app['version'] = '2.3.30';
 $app['release'] = '1';
 $app['vendor'] = 'ClearCenter';
 $app['packager'] = 'ClearCenter';
@@ -28,6 +28,7 @@ $app['menu_enabled'] = FALSE;
 
 $app['core_requires'] = array(
     'app-base-core >= 1:1.5.31',
+    'app-network-core >= 1:2.3.27',
     'app-language-core',
     'app-suva-core',
     'csplugin-audit',

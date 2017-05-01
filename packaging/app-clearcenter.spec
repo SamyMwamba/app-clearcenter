@@ -1,7 +1,7 @@
 
 Name: app-clearcenter
 Epoch: 1
-Version: 2.3.29
+Version: 2.3.30
 Release: 1%{dist}
 Summary: ClearCenter Base
 License: Proprietary
@@ -20,6 +20,7 @@ License: Proprietary
 Group: ClearOS/Libraries
 Requires: app-base-core
 Requires: app-base-core >= 1:1.5.31
+Requires: app-network-core >= 1:2.3.27
 Requires: app-language-core
 Requires: app-suva-core
 Requires: csplugin-audit

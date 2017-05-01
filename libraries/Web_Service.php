@@ -210,14 +210,15 @@ class Web_Service extends Engine
             $proxy_username = $proxy->get_username();
             $proxy_password = $proxy->get_password();
 
-            if (! empty($proxy_server))
+            if (! empty($proxy_server)) {
                 curl_setopt($ch, CURLOPT_PROXY, $proxy_server);
 
-            if (! empty($proxy_port))
-                curl_setopt($ch, CURLOPT_PROXYPORT, $proxy_port);
+                if (! empty($proxy_port))
+                    curl_setopt($ch, CURLOPT_PROXYPORT, $proxy_port);
 
-            if (! empty($proxy_username))
-                curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy_username . ':' . $proxy_password);
+                if (! empty($proxy_username))
+                    curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy_username . ':' . $proxy_password);
+            }
 
             // Set main curl options
             //----------------------
