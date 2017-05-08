@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'clearcenter';
-$app['version'] = '1.6.7';
+$app['version'] = '1.6.8';
 $app['release'] = '1';
 $app['vendor'] = 'ClearCenter';
 $app['packager'] = 'ClearCenter';
@@ -36,6 +36,7 @@ $app['core_requires'] = array(
     'app-suva-core',
     'csplugin-audit',
     'yum-marketplace-plugin',
+    'suva-client'
 );
 
 $app['core_file_manifest'] = array( 

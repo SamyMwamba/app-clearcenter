@@ -1,7 +1,7 @@
 
 Name: app-clearcenter
 Epoch: 1
-Version: 1.6.7
+Version: 1.6.8
 Release: 1%{dist}
 Summary: ClearCenter Base
 License: Proprietary
@@ -25,6 +25,7 @@ Requires: app-language-core
 Requires: app-suva-core
 Requires: csplugin-audit
 Requires: yum-marketplace-plugin
+Requires: suva-client
 
 %description core
 The base system provides a core set of tools for software from ClearCenter.
