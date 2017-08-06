@@ -115,17 +115,7 @@ class Application_Web_Service extends Web_Service
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        $software = new Software($this->package);
-
-        if ($software->is_installed()) {
-            $version = $software->get_version();
-            $release = $software->get_release();
-        } else {
-            $version = 0;
-            $release = 0;
-        }
-
-        $payload = $this->request('CheckForUpdate', '&version=' . $version . '&release=' . $release);
+        $payload = $this->request('CheckForUpdate');
 
         if (preg_match('/' . self::CONSTANT_DO_UPDATE . 'true/i', $payload))
             return TRUE;
@@ -169,10 +159,20 @@ class Application_Web_Service extends Web_Service
      * @return void
      */
 
-    private function _set_update_complete()
+    protected function _set_update_complete()
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        $payload = $this->request('SetUpdateComplete');
+        $software = new Software($this->package);
+
+        if ($software->is_installed()) {
+            $version = $software->get_version();
+            $release = $software->get_release();
+        } else {
+            $version = 0;
+            $release = 0;
+        }
+
+        $payload = $this->request('SetUpdateComplete', '&version=' . $version . '&release=' . $release);
     }
 }
