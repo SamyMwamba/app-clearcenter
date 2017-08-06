@@ -73,7 +73,7 @@ if (empty($rpm) || empty($app) || empty($basename))
 $service = new Application_Web_Service($basename, $rpm);
 
 try {
-    $do_update = $service->check_for_update();
+    $do_update = $service->get_update_availability();
     if ($do_update) {
         clearos_log($app, lang('clearcenter_service_requires_an_update'));
         $service->install_update();

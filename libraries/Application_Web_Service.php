@@ -107,11 +107,11 @@ class Application_Web_Service extends Web_Service
     /**
      * Checks for an available update.
      *
-     * @return boolean TRUE if update is required
+     * @return boolean TRUE if update is available
      * @throws Engine_Exception, WebServicesRemoteException
      */
 
-    public function check_for_update()
+    public function get_update_availability()
     {
         clearos_profile(__METHOD__, __LINE__);
 
