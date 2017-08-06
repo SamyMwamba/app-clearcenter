@@ -27,7 +27,7 @@ $app['menu_enabled'] = FALSE;
 /////////////////////////////////////////////////////////////////////////////
 
 $app['core_requires'] = array(
-    'app-base-core >= 1:1.5.31',
+    'app-base-core >= 1:2.3.45',
     'app-network-core >= 1:2.3.27',
     'app-language-core',
     'app-suva-core',

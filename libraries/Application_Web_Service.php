@@ -39,10 +39,14 @@ clearos_load_language('clearcenter');
 // Classes
 //--------
 
+use \clearos\apps\base\File as File;
+use \clearos\apps\base\Shell as Shell;
 use \clearos\apps\base\Software as Software;
 use \clearos\apps\base\Yum as Yum;
 use \clearos\apps\clearcenter\Web_Service as Web_Service;
 
+clearos_load_library('base/File');
+clearos_load_library('base/Shell');
 clearos_load_library('base/Software');
 clearos_load_library('base/Yum');
 clearos_load_library('clearcenter/Web_Service');
@@ -75,12 +79,14 @@ class Application_Web_Service extends Web_Service
     ///////////////////////////////////////////////////////////////////////////////
 
     const CONSTANT_DO_UPDATE = 'do_update = ';
+    const COMMAND_RPM = '/usr/bin/rpm';
 
     ///////////////////////////////////////////////////////////////////////////////
     // V A R I A B L E S
     ///////////////////////////////////////////////////////////////////////////////
 
     protected $package = '';
+    protected $rpm_file = '';
 
     ///////////////////////////////////////////////////////////////////////////////
     // M E T H O D S
@@ -102,6 +108,39 @@ class Application_Web_Service extends Web_Service
         parent::__construct($service);
 
         $this->package = $package;
+        $this->rpm_file = self::PATH_APPS . '/' . $service . '-latest.rpm';
+    }
+
+    /**
+     * Download update.
+     *
+     * @return void
+     * @throws Engine_Exception, WebServicesRemoteException
+     */
+
+    public function download_update()
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        $options['binary-data'] = TRUE;
+        $payload = $this->request('DownloadUpdate', '', $options);
+
+        $file = new File($this->rpm_file);
+        if ($file->exists())
+            $file->delete();
+
+        $file->create('root', 'root', '0644');
+        $file->add_lines($payload);
+
+        // Sanity check download
+        //----------------------
+
+        $shell = new Shell();
+        $shell->execute(self::COMMAND_RPM, '--checksig ' . $this->rpm_file, FALSE, $options);
+        $output = $shell->get_last_output_line();
+
+        if (!preg_match('/gpg OK/', $output))
+            throw new Engine_Exception($output);
     }
 
     /**
@@ -136,7 +175,7 @@ class Application_Web_Service extends Web_Service
 
         try {
             $update = new Yum();
-            $update->install(array($this->package), FALSE);
+            $update->local_install(array($this->rpm_file), FALSE);
         } catch (Exception $e) {
             // Keep going, see note below.
         }

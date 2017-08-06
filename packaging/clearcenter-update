@@ -76,12 +76,16 @@ try {
     $do_update = $service->get_update_availability();
     if ($do_update) {
         clearos_log($app, lang('clearcenter_service_requires_an_update'));
+        clearos_log($app, lang('clearcenter_service_downloading_update'));
+        $downloaded = $service->download_update();
+        clearos_log($app, lang('clearcenter_service_installing_update'));
         $service->install_update();
+        clearos_log($app, lang('clearcenter_service_installation_complete'));
     } else {
         clearos_log($app, lang('clearcenter_service_is_up_to_date'));
     }
 } catch (Exception $e) {
-    clearos_log($app, lang('clearcenter_service_update_failed:') . $e->getMessage());
+    clearos_log($app, lang('clearcenter_service_update_failed:') . ' ' . $e->getMessage());
 }
 
 // Add new update time in cron
