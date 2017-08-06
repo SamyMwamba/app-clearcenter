@@ -162,7 +162,7 @@ class Web_Service extends Engine
      * @throws Engine_Exception, Validation_Exception, Remote_Exception
      */
 
-    public function request($action, $postfields = "")
+    protected function request($action, $postfields = "")
     {
         clearos_profile(__METHOD__, __LINE__);
 
