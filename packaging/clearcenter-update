@@ -81,7 +81,7 @@ try {
         clearos_log($app, lang('clearcenter_service_is_up_to_date'));
     }
 } catch (Exception $e) {
-    clearos_log($app, lang('clearcenter_service_update_failed:') . $e->GetMessage());
+    clearos_log($app, lang('clearcenter_service_update_failed:') . $e->getMessage());
 }
 
 // Add new update time in cron
@@ -99,7 +99,7 @@ try {
 
 	$cron->add_configlet($app, $cron_entry);
 } catch (Exception $e) {
-	clearos_log($app, lang('clearcenter_service_update_failed:') . $e->GetMessage());
+	clearos_log($app, lang('clearcenter_service_update_failed:') . $e->getMessage());
 }
 
 // vim: syntax=php ts=4
