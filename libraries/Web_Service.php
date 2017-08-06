@@ -156,13 +156,14 @@ class Web_Service extends Engine
      *
      * @param string $action     action
      * @param string $postfields post fields (eg ?ip=1.2.3.4)
+     * @param array  $options    request options
      *
      * @access private
      * @return string payload
      * @throws Engine_Exception, Validation_Exception, Remote_Exception
      */
 
-    protected function request($action, $postfields = "")
+    protected function request($action, $postfields = "", $options = [])
     {
         clearos_profile(__METHOD__, __LINE__);
 
@@ -273,7 +274,9 @@ class Web_Service extends Engine
                         throw new Remote_Exception($returned[2], CLEAROS_INFO);
                     } else {
                         // Not all replies have a payload (just TRUE/FALSE)
-                        if (isset($message[1]))
+                        if (isset($options['binary-data']) && $options['binary-data'])
+                            return $rawmessage;
+                        else if (isset($message[1]))
                             return $message[1];
                         else
                             return "";
