@@ -1,9 +1,9 @@
 [clearos-fast-updates]
-name=ClearOS 7.3 - $basearch - Fast Updates
-baseurl=http://download1.clearsdn.com/marketplace/fast_updates/7.3/$basearch
-    http://download2.clearsdn.com/marketplace/fast_updates/7.3/$basearch
-    http://download3.clearsdn.com/marketplace/fast_updates/7.3/$basearch
-    http://download4.clearsdn.com/marketplace/fast_updates/7.3/$basearch
+name=ClearOS 7 - $basearch - Fast Updates
+baseurl=http://download1.clearsdn.com/marketplace/fast_updates/7.4/$basearch
+    http://download2.clearsdn.com/marketplace/fast_updates/7.4/$basearch
+    http://download3.clearsdn.com/marketplace/fast_updates/7.4/$basearch
+    http://download4.clearsdn.com/marketplace/fast_updates/7.4/$basearch
 enabled=1
 gpgcheck=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-ClearOS
