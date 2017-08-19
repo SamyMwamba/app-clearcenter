@@ -97,11 +97,7 @@ try {
         " root /usr/sbin/clearcenter-update -b $basename -r $rpm -a $app >/dev/null 2>&1\n";
 
 	$cron = new Cron();
-
-	if ($cron->exists_configlet($app))
-		$cron->delete_configlet($app);
-
-	$cron->add_configlet($app, $cron_entry);
+	$cron->replace_configlet($app, $cron_entry);
 } catch (Exception $e) {
 	clearos_log($app, lang('clearcenter_service_update_failed:') . $e->getMessage());
 }

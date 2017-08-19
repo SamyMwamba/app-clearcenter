@@ -31,6 +31,7 @@ $app['core_requires'] = array(
     'app-network-core >= 1:2.3.27',
     'app-language-core',
     'app-suva-core',
+    'app-tasks-core >= 1:2.4.0',
     'csplugin-audit',
     'yum-marketplace-plugin',
 );

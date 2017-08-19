@@ -23,6 +23,7 @@ Requires: app-base-core >= 1:2.3.45
 Requires: app-network-core >= 1:2.3.27
 Requires: app-language-core
 Requires: app-suva-core
+Requires: app-tasks-core >= 1:2.4.0
 Requires: csplugin-audit
 Requires: yum-marketplace-plugin
 
