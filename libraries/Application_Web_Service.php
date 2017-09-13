@@ -175,7 +175,7 @@ class Application_Web_Service extends Web_Service
 
         try {
             $update = new Yum();
-            $update->local_install(array($this->rpm_file), FALSE);
+            $update->install(array($this->package), FALSE);
         } catch (Exception $e) {
             // Keep going, see note below.
         }
