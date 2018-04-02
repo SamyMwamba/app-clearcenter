@@ -1,23 +1,24 @@
 
 Name: app-clearcenter
 Epoch: 1
-Version: 2.4.1
+Version: 2.4.2
 Release: 1%{dist}
 Summary: ClearCenter Base
 License: Proprietary
-Group: ClearOS/Apps
+Group: Applications/Apps
 Source: %{name}-%{version}.tar.gz
 Buildarch: noarch
 Requires: %{name}-core = 1:%{version}-%{release}
 Requires: app-base
+Requires: theme-clearos-admin >= 7.4.3
 
 %description
 The base system provides a core set of tools for software from ClearCenter.
 
 %package core
-Summary: ClearCenter Base - Core
+Summary: ClearCenter Base - API
 License: Proprietary
-Group: ClearOS/Libraries
+Group: Applications/API
 Requires: app-base-core
 Requires: app-base-core >= 1:2.3.45
 Requires: app-network-core >= 1:2.3.27
