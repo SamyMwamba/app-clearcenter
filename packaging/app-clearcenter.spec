@@ -1,11 +1,13 @@
 
 Name: app-clearcenter
 Epoch: 1
-Version: 2.4.2
+Version: 2.4.3
 Release: 1%{dist}
 Summary: ClearCenter Base
 License: Proprietary
 Group: Applications/Apps
+Packager: ClearCenter
+Vendor: ClearCenter
 Source: %{name}-%{version}.tar.gz
 Buildarch: noarch
 Requires: %{name}-core = 1:%{version}-%{release}
@@ -20,7 +22,7 @@ Summary: ClearCenter Base - API
 License: Proprietary
 Group: Applications/API
 Requires: app-base-core
-Requires: app-base-core >= 1:2.3.45
+Requires: app-base-core >= 1:2.4.24
 Requires: app-network-core >= 1:2.3.27
 Requires: app-language-core
 Requires: app-suva-core

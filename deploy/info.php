@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'clearcenter';
-$app['version'] = '2.4.2';
+$app['version'] = '2.4.3';
 $app['release'] = '1';
 $app['vendor'] = 'ClearCenter';
 $app['packager'] = 'ClearCenter';
@@ -31,7 +31,7 @@ $app['requires'] = array(
 );
 
 $app['core_requires'] = array(
-    'app-base-core >= 1:2.3.45',
+    'app-base-core >= 1:2.4.24',
     'app-network-core >= 1:2.3.27',
     'app-language-core',
     'app-suva-core',

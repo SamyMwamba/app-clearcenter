@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Install wizard flag
+#--------------------
+
+logger -p local6.notice -t installer "app-clearcenter - adding wizard flag"
+touch /var/clearos/base/wizard
